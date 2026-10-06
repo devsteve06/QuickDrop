@@ -2,7 +2,7 @@
 
 Status: pre-implementation, planning only. No application code exists yet.
 Owner: engineering (rotating named owner per iteration).
-Sibling docs: [00-product-brief.md](00-product-brief.md) · [01-tech-stack.md](01-tech-stack.md) · [02-architecture.md](02-architecture.md) · [03-data-model.md](03-data-model.md) · [04-api-contract.md](04-api-contract.md) · [05-auth-and-roles.md](05-auth-and-roles.md) · [06-tracking-and-eta.md](06-tracking-and-eta.md) · [07-payments-and-ledger.md](07-payments-and-ledger.md) · [08-dispatch-and-matching.md](08-dispatch-and-matching.md) · [09-frontend-and-pwa.md](09-frontend-and-pwa.md) · [10-testing-quality-and-security.md](10-testing-quality-and-security.md) · [11-roadmap-and-iterations.md](11-roadmap-and-iterations.md) · [DECISIONS.md](DECISIONS.md) · [docs index](README.md)
+Sibling docs: [00-product-brief.md](00-product-brief.md) · [01-tech-stack.md](01-tech-stack.md) · [02-architecture.md](02-architecture.md) · [03-data-model.md](03-data-model.md) · [04-api-contract.md](04-api-contract.md) · [05-realtime-and-tracking.md](05-realtime-and-tracking.md) · [06-frontend-architecture.md](06-frontend-architecture.md) · [07-roadmap.md](07-roadmap.md) · [DECISIONS.md](DECISIONS.md) · [docs index](README.md)
 Operational set: [08-testing-strategy.md](08-testing-strategy.md) · [09-infrastructure-and-cost.md](09-infrastructure-and-cost.md) · [10-risk-register.md](10-risk-register.md) · [11-launch-playbook.md](11-launch-playbook.md)
 
 ---
@@ -206,7 +206,7 @@ CREATE TRIGGER ledger_entries_no_delete BEFORE DELETE ON ledger_entries
 
   2. (c) corrections are only possible by posting a **reversing** transaction: the original entry remains, a new `reversal` txn offsets it, and the pair balances to zero. Assert both rows exist after a correction and that the account balance returns to its pre-error value.
   3. Nightly audit asserts `COUNT(*) = 0` for `updated_at > created_at` on ledger entries (belt and braces — the trigger should make this impossible).
-- **Note:** if ops ever legitimately needs to correct data, the answer is a reversing entry, full stop. Document that in [07-payments-and-ledger.md](07-payments-and-ledger.md).
+- **Note:** if ops ever legitimately needs to correct data, the answer is a reversing entry, full stop. Document that in [03-data-model.md §7.3 Invariants](03-data-model.md#73-invariants).
 
 ### B-09 Webhook replay safety
 
@@ -680,7 +680,7 @@ restore drill                           ███ (monthly)
 - Migration rehearsal: apply the release's migrations to a **production-sized clone**, then run the expand/contract sequence and verify the contract step is safe with the previous release still live. This is the only way to know the migration is genuinely zero-downtime.
 - Accessibility audit (axe on the golden path) and a manual screen-reader smoke on the customer booking flow.
 - 3-day soak at expected peak, twice the expected peak, and twice-expected-peak with a Redis kill in the middle.
-- Reconciliation: Stripe balance transactions vs. our ledger for the full test period, difference must be exactly zero. This is the same query that runs in production ([07-payments-and-ledger.md](07-payments-and-ledger.md)); if it does not pass on test data it will not pass on real money.
+- Reconciliation: Stripe balance transactions vs. our ledger for the full test period, difference must be exactly zero. This is the same query that runs in production ([03-data-model.md §4.4 Money](03-data-model.md#44-money)); if it does not pass on test data it will not pass on real money.
 
 ### Policy on flakiness and bypasses
 

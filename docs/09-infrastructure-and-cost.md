@@ -1,8 +1,8 @@
 # 09 — Infrastructure and Cost
 
 Status: pre-implementation, planning only. Every command and file below is a **specification to be created**, not something that exists in this repository today.
-Owner: engineering, with named per-iteration infra owner (see [11-roadmap-and-iterations.md](11-roadmap-and-iterations.md)).
-Sibling docs: [00-product-brief.md](00-product-brief.md) · [01-tech-stack.md](01-tech-stack.md) · [02-architecture.md](02-architecture.md) · [03-data-model.md](03-data-model.md) · [04-api-contract.md](04-api-contract.md) · [05-auth-and-roles.md](05-auth-and-roles.md) · [06-tracking-and-eta.md](06-tracking-and-eta.md) · [07-payments-and-ledger.md](07-payments-and-ledger.md) · [08-dispatch-and-matching.md](08-dispatch-and-matching.md) · [09-frontend-and-pwa.md](09-frontend-and-pwa.md) · [10-testing-quality-and-security.md](10-testing-quality-and-security.md) · [11-roadmap-and-iterations.md](11-roadmap-and-iterations.md) · [DECISIONS.md](DECISIONS.md) · [docs index](README.md)
+Owner: engineering, with named per-iteration infra owner (see [07-roadmap.md](07-roadmap.md)).
+Sibling docs: [00-product-brief.md](00-product-brief.md) · [01-tech-stack.md](01-tech-stack.md) · [02-architecture.md](02-architecture.md) · [03-data-model.md](03-data-model.md) · [04-api-contract.md](04-api-contract.md) · [05-realtime-and-tracking.md](05-realtime-and-tracking.md) · [06-frontend-architecture.md](06-frontend-architecture.md) · [07-roadmap.md](07-roadmap.md) · [DECISIONS.md](DECISIONS.md) · [docs index](README.md)
 Operational set: [08-testing-strategy.md](08-testing-strategy.md) · [09-infrastructure-and-cost.md](09-infrastructure-and-cost.md) · [10-risk-register.md](10-risk-register.md) · [11-launch-playbook.md](11-launch-playbook.md)
 
 ---

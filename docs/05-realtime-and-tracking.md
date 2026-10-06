@@ -6,7 +6,7 @@ Sibling docs: [00-product-brief.md](./00-product-brief.md) · [01-tech-stack.md]
 
 Version claims are taken verbatim from [../stack_report.md](../stack_report.md) and are not re-researched here. If a version is not in the report, it is not decided; raise it in [DECISIONS.md](./DECISIONS.md) rather than picking one.
 
-> **Naming note.** [./README.md](./README.md) reserves `05-payments-and-ledger.md` and `06-dispatch-and-tracking.md` for other surfaces, and reserves `04-frontend-pwa.md` for the frontend. The filenames requested for this work are `05-realtime-and-tracking.md` and `06-frontend-architecture.md`, so the doc set now has two competing slots at `05` and `06` and no `04-frontend-pwa.md`. Filenames were left exactly as requested; reconciling the index is a decision for the index owner, tracked in §22.
+> **Naming note (resolved).** This document and [06-frontend-architecture.md](./06-frontend-architecture.md) were written under the filenames requested for them, `05-realtime-and-tracking.md` and `06-frontend-architecture.md`, which collided with an earlier index that had reserved `05` and `06` for payments and dispatch. The filenames on disk are now canonical and the earlier reservations are withdrawn: the API contract is [04-api-contract.md](./04-api-contract.md), the frontend is [06-frontend-architecture.md](./06-frontend-architecture.md), and this document owns realtime and tracking. Every cross-reference in the set has been repointed. The one subject that still has no document of its own — the operational Stripe Connect flows — is gap 6 in [the doc index](./README.md#known-gaps-in-the-plan-as-of-2026-10-05).
 
 ---
 
@@ -1024,8 +1024,8 @@ Surfaced, not resolved. The full `OQ-1` to `OQ-11` list is in [02-architecture.m
 | Open | The unknown-battery multipliers (1.25 and 1.5) are guesses and need field calibration against real courier drain | §5.2 | Engineering, after the first 200 deliveries |
 | Open | Ops room scale: is one socket with 40 live rooms within budget, or does the board need an aggregation channel | §9 | Engineering, measured not assumed |
 | Open | `permessage-deflate` is off by default; it needs a CPU benchmark on the target instance before it is enabled | §7.1 | Engineering |
-| Open | Filename collision: `05`/`06` are reserved in [./README.md](./README.md) for payments and dispatch, and `04-frontend-pwa.md` has no file. This document and [06-frontend-architecture.md](./06-frontend-architecture.md) use the requested names and leave the index unchanged | the doc index | Index owner |
-| Open | Filename drift in existing cross-references: `08`, `10` and `11` link to `06-tracking-and-eta.md`, `09-frontend-and-pwa.md` and `10-testing-quality-and-security.md`, which do not exist on disk | link integrity across the set | Index owner |
+| Resolved | Filename collision at `05`/`06`: the doc set now treats `05-realtime-and-tracking.md` and `06-frontend-architecture.md` as canonical and every cross-reference has been repointed | — | Closed 2026-10-06 |
+| Resolved | Filename drift in cross-references: `08`, `09`, `10` and `11` previously linked to documents that do not exist on disk. All now resolve to the twelve files that do | — | Closed 2026-10-06 |
 
 ---
 

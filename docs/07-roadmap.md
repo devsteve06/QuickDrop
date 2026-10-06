@@ -20,7 +20,7 @@
 - [stack_report.md](../stack_report.md) — read-only pinned stack research
 - [AGENTS.md](../AGENTS.md) — house style rules
 
-> **How to use this document:** Treat each iteration as a demoable vertical slice that cuts through `web/`, `api/`, `data/`, `worker/`, `infra/`, and `test/`. Do not read this as a "models first" or "API first" plan. The table of iterations below is the high-level view; details follow in later sections. Cross-links are to files that exist on disk; no links are made to the never-written `05-auth-and-roles.md`, `06-tracking-and-eta.md`, `07-payments-and-ledger.md`, `08-dispatch-and-matching.md`, `09-frontend-and-pwa.md`, `10-testing-quality-and-security.md`, `11-roadmap-and-iterations.md` files (see [AGENTS.md § Known blockers](../AGENTS.md#known-blockers-as-of-2026-10-05)).
+> **How to use this document:** Treat each iteration as a demoable vertical slice that cuts through `web/`, `api/`, `data/`, `worker/`, `infra/`, and `test/`. Do not read this as a "models first" or "API first" plan. The table of iterations below is the high-level view; details follow in later sections. Cross-links are to files that exist on disk, and every cross-reference in the doc set has been repointed at the twelve canonical filenames; see [the doc index](./README.md#document-index).
 
 ---
 
@@ -35,7 +35,7 @@ The schedule is built around concrete constraints from the plan. Where assumptio
 | SA-03 | **~14-week runway (pre-seed).** | Stated in [10-risk-register.md](10-risk-register.md) (top risks, "14 weeks is not enough" — R-20). Iterations I0–I10 cover ~14 calendar weeks of effort with controlled overlap. | If runway drops below 12 weeks, cut Must items first (not polish). If runway grows, pull Should items from deferred list. |
 | SA-04 | **Pre-seed, not venture-funded at scale.** | Cost model targets modest scale ([09-infrastructure-and-cost.md](09-infrastructure-and-cost.md), ~$253/mo month 1, ~$3,559/mo month 6 with contingency). | Large burn rate changes the "move fast but measure margin" constraint ([10-risk-register.md R-09](10-risk-register.md#r-09--cost-creep-and-negative-contribution-margin-per-delivery)). |
 | SA-05 | **iOS PWA reality is foreground-first.** Continuous background tracking on iOS Safari is not achievable in a browser ([stack_report.md §2](../stack_report.md#2-pwa--ios-constraints), [WebKit Geolocation](https://developer.apple.com/documentation/webkitjs/geolocation)). | Drives staleness handling, heartbeat, installed-PWA measurement, and a native-wrapper contingency (R-02). | If continuous background becomes a compliance requirement, v1 cannot satisfy it; native wrapper (Capacitor) for courier app becomes necessary. |
-| SA-06 | **Launch city and currency undeclared.** *placeholder* — affects pricing, Stripe fees, zones. | [AGENTS.md § Known blockers](../AGENTS.md#known-blockers-as-of-2026-10-05) calls this out. Fares in [00-product-brief.md](00-product-brief.md) are illustrative USD. | Currency affects Stripe fee math and ledger; city affects legal classification (R-04). These must be pinned before or at I2 (pricing) and before I6 (payouts). |
+| SA-06 | **Launch city and currency undeclared.** *placeholder* — affects pricing, Stripe fees, zones. | [AGENTS.md § Known blockers](../AGENTS.md#known-blockers-as-of-2026-10-06) calls this out. Fares in [00-product-brief.md](00-product-brief.md) are illustrative USD. | Currency affects Stripe fee math and ledger; city affects legal classification (R-04). These must be pinned before or at I2 (pricing) and before I6 (payouts). |
 
 ---
 
@@ -82,7 +82,7 @@ An iteration counts when it can be **demonstrated** by running the Manual QA scr
 
 **Totals (person-days):** **91–130 person-days** across 11 iterations (I0–I10) — the sum of the per-iteration low and high estimates above, which are the authoritative figures. Targets ~14 calendar weeks with deliberate overlap on independent work.
 
-**Committed estimate for capacity planning: 109 person-days** (I0 12, I1 10, I2 10, I3 12, I4 10, I5 9, I6 14, I7 8, I8 9, I9 9, I10 6). Against 2 engineers × 14 weeks × 5 days = 140 available person-days, that is roughly **78% utilisation**, leaving ~22% unallocated. That unallocated portion is the deliberate reserve required by the runway-overrun mitigation in [10-risk-register.md R-20](10-risk-register.md#r-20--runway-overrun--14-weeks-is-not-enough). It is the schedule's only slack; it is not a licence to add scope. At 3 engineers the same plan finishes in about 10–11 weeks with more review capacity, not more features.
+**Committed estimate for capacity planning: 109 person-days** (I0 12, I1 10, I2 10, I3 12, I4 10, I5 9, I6 14, I7 8, I8 9, I9 9, I10 6). Against 2 engineers × 14 weeks × 5 days = 140 available person-days, that is roughly **78% utilisation**, leaving ~22% unallocated. That unallocated portion is the deliberate reserve required by the runway-overrun mitigation in [10-risk-register.md R-20](10-risk-register.md#1-risk-register). It is the schedule's only slack; it is not a licence to add scope. At 3 engineers the same plan finishes in about 10–11 weeks with more review capacity, not more features.
 
 > **Naming note for task lists below.** [00-product-brief.md](00-product-brief.md) §8 numbers its stories `US-C1`–`US-C8` (customer), `US-R1`–`US-R7` (**courier** — the prefix is `R` for "rider/courier", not `K`), and `US-O1`–`US-O4` (ops). This roadmap uses that scheme verbatim, so there is no `C-x`/`K-x`/`O-x` mapping to invent. Any place below that says "courier" and shows `US-Rx` is the courier surface. Table and column names named in task lists are reconciled against [03-data-model.md](./03-data-model.md) at the start of each iteration; where a name here has not yet been written down it is marked *to confirm*.
 
@@ -192,7 +192,7 @@ This is bootstrap, not features. Its most important product is **knowledge**: it
 
 **Goal:** A courier can sign up, complete a stubbed KYC step, grant location, go online, and appear on a map as available — with a first real Stripe Connect onboarding attempt already in flight.
 
-This iteration carries the single most schedule-critical non-code task in the plan: **the first courier's KYC lead time is measured here, eight weeks before launch**, per [10-risk-register.md R-03](10-risk-register.md#r-03--courier-kyc--payout-onboarding-lead-time-and-failure-rate).
+This iteration carries the single most schedule-critical non-code task in the plan: **the first courier's KYC lead time is measured here, eight weeks before launch**, per [10-risk-register.md R-03](10-risk-register.md#r-03--courier-kyc-and-payout-onboarding-lead-time-and-failure-rate).
 
 - **User stories covered:** US-R1 (Must, availability and tracking-health visibility), US-R7 (Must, partially — an earnings statement showing zero is better than a 404).
 - **Scope — In:**
@@ -231,7 +231,7 @@ This iteration carries the single most schedule-critical non-code task in the pl
   - The tracking-health header has four states and never renders a stale position as live; every displayed position carries its age (AGENTS.md rule 5).
   - **Measured artifacts:** KYC lead-time number and iOS cadence distribution both written down with sample size. A roadmap that ships without these two numbers has not closed I2.
   - The hard `payouts_enabled` gate on live work is at least stubbed and asserted in a test that is currently expected to fail-deny, so I6 flips it on.
-  - **Observability bar:** `courier_position_rate` (per minute, per courier), `courier_stale_share`, and `display_mode` distribution emitted. **Note:** the `courier_stale_share` alert threshold is one of the known cross-document disagreements ([AGENTS.md § Known blockers](../AGENTS.md#known-blockers-as-of-2026-10-05)) — this iteration emits the metric and picks the 20% value from [10-risk-register.md R-02](10-risk-register.md#r-02--ios-pwa-background-location-limits-undermine-the-tracking-promise) as the provisional threshold, flagged **OPEN** for reconciliation.
+  - **Observability bar:** `courier_position_rate` (per minute, per courier), `courier_stale_share`, and `display_mode` distribution emitted. **Note:** the `courier_stale_share` alert threshold is one of the known cross-document disagreements ([AGENTS.md § Known blockers](../AGENTS.md#known-blockers-as-of-2026-10-06)) — this iteration emits the metric and picks the 20% value from [10-risk-register.md R-02](10-risk-register.md#r-02--ios-pwa-background-location-limits-undermine-the-tracking-promise) as the provisional threshold, flagged **OPEN** for reconciliation.
 - **Effort:** **10 person-days** (range 8–12, confidence **M**).
 - **Dependencies:** I0. Runs **in parallel with I1** — the two touch disjoint tables and endpoints, which is the only deliberate parallel pair in this plan. **Carry-over risk:** R-03 (KYC lead time) and R-02 (iOS tracking) are both *measured* here; if either measures badly, I4, I7, and I10 all change shape. R-26 (account takeover) requires session revocation on courier status change, built here.
 
@@ -332,7 +332,7 @@ This iteration carries the single most schedule-critical non-code task in the pl
   - **Observability bar:** `courier_position_rate`, `courier_stale_share`, `fan_out_latency_p95`, WS reconnect rate per courier, `eta_error_p50/p90` versus eventual actual arrival.
   - Courier guidance about iOS background limits is in-product, non-blaming, and testable — not documentation.
 - **Effort:** **10 person-days** (range 8–12, confidence **M**).
-- **Dependencies:** I3. **Carry-over risk:** R-02 (highest-impact residual risk), R-10 (connection cost multiplier), and the unresolved **map tile provider** ([AGENTS.md § Known blockers](../AGENTS.md#known-blockers-as-of-2026-10-05)) — self-hosting is pinned but the free tier is non-commercial, so a paid plan is implied. Provision the tile host in I0/I1, not here.
+- **Dependencies:** I3. **Carry-over risk:** R-02 (highest-impact residual risk), R-10 (connection cost multiplier), and the unresolved **map tile provider** ([AGENTS.md § Known blockers](../AGENTS.md#known-blockers-as-of-2026-10-06)) — self-hosting is pinned but the free tier is non-commercial, so a paid plan is implied. Provision the tile host in I0/I1, not here.
 
 ---
 
@@ -564,7 +564,7 @@ This iteration carries the single most schedule-critical non-code task in the pl
   - Nightly invariant sweep asserting no duplicate assignment exists.
   - Security review: authz matrix audited against [04-api-contract.md](./04-api-contract.md), IDOR sweep on every customer/courier-scoped endpoint, dependency and OSV scanning, secret scanning, session revocation behaviour (R-26), step-up auth for money-moving and account recovery.
   - Retention jobs run for real: courier positions 90 days, addresses 24 months, logs 30 days (R-08), each a tested job.
-  - **Reconciliation of the three `courier_stale_share` thresholds** that currently disagree across documents ([AGENTS.md § Known blockers](../AGENTS.md#known-blockers-as-of-2026-10-05)) — this is a documentation-and-config defect and it is closed here or the alert fires on three different numbers.
+  - **Reconciliation of the three `courier_stale_share` thresholds** that currently disagree across documents ([AGENTS.md § Known blockers](../AGENTS.md#known-blockers-as-of-2026-10-06)) — this is a documentation-and-config defect and it is closed here or the alert fires on three different numbers.
 - **Scope — Out:** performance work that is not on a measured hot path; multi-region failover (R-16 is **Accepted** for launch); native app; anything that is a v2 feature.
 - **Task breakdown by layer:**
 
@@ -843,7 +843,7 @@ The 14-week calendar does not hold for one person. Do not attempt to run I1 and 
 
 ## 20. Sequencing of open questions
 
-The open questions inherited from [stack_report.md §7](../stack_report.md#7-open-questions), [00-product-brief.md §11](00-product-brief.md#11-open-questions-carried-forward), and [AGENTS.md § Known blockers](../AGENTS.md#known-blockers-as-of-2026-10-05) are **carried forward, not resolved by this document**. Each is assigned an iteration that owns closing it.
+The open questions inherited from [stack_report.md §7](../stack_report.md#7-open-questions), [00-product-brief.md §11](00-product-brief.md#11-open-questions-carried-forward), and [AGENTS.md § Known blockers](../AGENTS.md#known-blockers-as-of-2026-10-06) are **carried forward, not resolved by this document**. Each is assigned an iteration that owns closing it.
 
 | Open question | Closed by | Why there | Consequence if it slips |
 |---|---|---|---|

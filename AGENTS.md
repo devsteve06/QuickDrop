@@ -51,14 +51,20 @@ There is still no application code.
 capacity of 140. Critical path: **I0 → I1 → I3 → I4 → I6 → I9 → I10**. Read
 `docs/07-roadmap.md` before planning any work.
 
-### Beware the index drift
+### Filenames are canonical
 
-`README.md` and `docs/README.md` both list documents under filenames that were
-never written (`05-auth-and-roles.md`, `06-tracking-and-eta.md`,
-`07-payments-and-ledger.md`, `08-dispatch-and-matching.md`, `09-frontend-and-pwa.md`,
-`10-testing-quality-and-security.md`, `11-roadmap-and-iterations.md`). **Trust the
-table above, not those indexes.** Do not go hunting for those files, and do not
-duplicate their content elsewhere to work around a 404.
+An earlier index reserved a different set of filenames (`05-auth-and-roles.md`,
+`06-tracking-and-eta.md`, `07-payments-and-ledger.md`, `08-dispatch-and-matching.md`,
+`09-frontend-and-pwa.md`, `10-testing-quality-and-security.md`,
+`11-roadmap-and-iterations.md`). Those files were never written. All cross-references
+have been repointed at the twelve files in the table above, which are now the single
+canonical scheme. The `05`/`06` collision is settled in favour of
+`05-realtime-and-tracking.md` and `06-frontend-architecture.md`. Do not resurrect the old
+names, and do not duplicate content elsewhere to work around a 404 — fix the link.
+
+One subject still has no document of its own: the operational Stripe Connect flows.
+`01-tech-stack.md` ADR-3 owns the account model and `docs/03-data-model.md` owns the
+ledger and settlement mechanics. See gap 6 in `docs/README.md`.
 
 ## Pinned stack
 
@@ -106,29 +112,33 @@ ASCII art · ISO `YYYY-MM-DD` dates · docs dated 2026-10-05 unless a later revi
 recorded · link between documents instead of duplicating content · cite a URL for
 every non-obvious factual claim.
 
-## Known blockers, as of 2026-10-05
+## Known blockers, as of 2026-10-06
 
-1. Doc numbering conflicts; `01` and `03`/`04` slots are contested between files on
-   disk and links inside other docs.
-2. Launch city and currency are unnamed. Fares in `00-product-brief.md` are
+1. Launch city and currency are unnamed. Fares in `00-product-brief.md` are
    illustrative; `08` assumes Berlin while `09` mixes `$` with a EUR-shaped Stripe
    fee.
-3. Map tile provider unresolved: self-hosted is pinned, but the risk register notes
+2. Map tile provider unresolved: self-hosted is pinned, but the risk register notes
    the free tier is non-commercial, implying a paid plan.
-4. `courier_stale_share` alert thresholds disagree across three documents
+3. `courier_stale_share` alert thresholds disagree across three documents
    (5/12% vs 20% vs 25/20/15%). `07-roadmap.md` pins a provisional 20% at I2 and
    assigns reconciliation to I9 — that is not yet reflected in the older docs.
-5. Three cost figures are marked `VERIFY`: MapTiler tile pricing, Grafana Cloud
+4. Three cost figures are marked `VERIFY`: MapTiler tile pricing, Grafana Cloud
    free-tier limits, A2P 10DLC registration fees.
+5. No document owns the operational Stripe Connect flows end to end. `01-tech-stack.md`
+   ADR-3 owns the account model and `03-data-model.md` owns the ledger and settlement;
+   the flow-by-flow narrative does not exist yet. Assign an owner at Iteration I6.
+
+Doc numbering is no longer a blocker — the twelve filenames on disk are canonical and
+every cross-reference has been repointed.
 
 Full list with owners: [docs/README.md § Known gaps](docs/README.md).
 
 ## Conventions for commits
 
 Write conventional commits (`feat:`, `fix:`, `docs:`, `chore:`). Do not commit
-secrets or `.env` files. Nothing has been committed since `4ac8f38 Initial commit` —
-the entire plan plus `stack_report.md` is currently untracked, and `README.md` is
-modified but uncommitted.
+secrets or `.env` files. The plan landed in `ab7f8d9`; the link repair followed it.
+Iteration 0 has not started, so there is no build, lint or typecheck command to run
+yet — do not report one as passing.
 
 ## If you are starting implementation
 

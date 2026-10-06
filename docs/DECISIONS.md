@@ -14,7 +14,7 @@ Running, numbered ADR log. Every decision the project makes gets an entry here, 
 | ID | Title | Status |
 |---|---|---|
 | [ADR-0001](#adr-0001--pin-the-runtime-and-framework-versions-to-the-verified-2026-09-set) | Pin the runtime and framework versions to the verified 2026-09 set | Accepted |
-| [ADR-0002](#adr-0002--next-js-web-tier-plus-a-separate-hono-api-service) | Next.js web tier plus a separate Hono API service | Accepted |
+| [ADR-0002](#adr-0002--nextjs-web-tier-plus-a-separate-hono-api-service) | Next.js web tier plus a separate Hono API service | Accepted |
 | [ADR-0003](#adr-0003--postgresql--postgis-as-the-single-source-of-truth) | PostgreSQL + PostGIS as the single source of truth | Accepted |
 | [ADR-0004](#adr-0004--integer-minor-units-with-a-hand-rolled-double-entry-ledger-in-postgres) | Integer minor units with a hand-rolled double-entry ledger in Postgres | Accepted |
 | [ADR-0005](#adr-0005--stripe-connect-separate-charges-and-transfers) | Stripe Connect: separate charges and transfers | Accepted |
@@ -22,8 +22,8 @@ Running, numbered ADR log. Every decision the project makes gets an entry here, 
 | [ADR-0007](#adr-0007--websocket-primary-tracking-with-sse-fallback) | WebSocket-primary tracking with SSE fallback | Accepted |
 | [ADR-0008](#adr-0008--hand-rolled-workbox-service-worker-not-ext-pwa) | Hand-rolled Workbox service worker, not ext-pwa | Accepted |
 | [ADR-0009](#adr-0009--self-hosted-better-auth-sessions-in-our-own-postgres) | Self-hosted Better Auth sessions in our own Postgres | Accepted |
-| [ADR-0010](#adr-0010--drizzle-orm-and-postgres-js-over-prisma) | Drizzle ORM and postgres.js over Prisma | Accepted |
-| [ADR-0011](#adr-0011--bullmq-and-redis-over-inngest-or-trigger-dev) | BullMQ and Redis over Inngest or Trigger.dev | Accepted |
+| [ADR-0010](#adr-0010--drizzle-orm-and-postgresjs-over-prisma) | Drizzle ORM and postgres.js over Prisma | Accepted |
+| [ADR-0011](#adr-0011--bullmq-and-redis-over-inngest-or-triggerdev) | BullMQ and Redis over Inngest or Trigger.dev | Accepted |
 | [ADR-0012](#adr-0012--maplibre-gl-js-with-self-hosted-vector-tiles) | MapLibre GL JS with self-hosted vector tiles | Accepted |
 | [ADR-0013](#adr-0013--match-with-st_dwithin-and-for-update-skip-locked) | Match with `ST_DWithin` and `FOR UPDATE SKIP LOCKED` | Accepted |
 | [ADR-0014](#adr-0014--railway-as-the-single-hosting-provider) | Railway as the single hosting provider | Accepted |
@@ -32,13 +32,13 @@ Running, numbered ADR log. Every decision the project makes gets an entry here, 
 | [ADR-0017](#adr-0017--no-courier-funds-held-longer-than-the-weekly-settlement-run) | No courier funds held longer than the weekly settlement run | Accepted |
 | [ADR-0018](#adr-0018--webkit-runs-in-ci-from-day-one) | WebKit runs in CI from day one | Accepted |
 | [ADR-0019](#adr-0019--manual-railway-deploys-from-main-for-v1) | Manual Railway deploys from `main` for v1 | Accepted |
-| [ADR-0020](#adr-0020--single-city-address-based-and-prepaid-only-at-launch) | Single city, address-based, prepaid only at launch | Accepted |
+| [ADR-0020](#adr-0020--single-city-address-based-prepaid-only-at-launch) | Single city, address-based, prepaid only at launch | Accepted |
 | [ADR-0021](#adr-0021--foreground-tracking-plus-server-side-staleness-detection) | Foreground tracking plus server-side staleness detection | Accepted |
 | [ADR-0022](#adr-0022--courier-position-upload-defaults-to-batched-http-post) | Courier position upload defaults to batched HTTP POST | Proposed |
 | [ADR-0023](#adr-0023--pin-the-stripe-api-version-and-migrate-onto-accounts-v2) | Pin the Stripe API version and migrate onto Accounts v2 | Proposed |
 | [ADR-0024](#adr-0024--typescript-70-programmatic-api-compatibility-gate) | TypeScript 7.0 programmatic-API compatibility gate | Proposed |
 | [ADR-0025](#adr-0025--keep-node-24-until-node-26-lts-is-proven-in-production) | Keep Node 24 until Node 26 LTS is proven in production | Proposed |
-| [ADR-0026](#adr-0026--better-auth-post-vercel-acquisition-exit-plan) | Better Auth post-acquisition exit plan | Proposed |
+| [ADR-0026](#adr-0026--better-auth-post-acquisition-exit-plan) | Better Auth post-acquisition exit plan | Proposed |
 | [ADR-0027](#adr-0027--serwist-is-the-pre-agreed-sw-fallback-if-workbox-integration-fails) | Serwist is the pre-agreed SW fallback if Workbox integration fails | Proposed |
 | [ADR-0028](#adr-0028--courier-position-history-retention-and-downsampling) | Courier position history retention and downsampling | Proposed |
 
@@ -63,7 +63,7 @@ Running, numbered ADR log. Every decision the project makes gets an entry here, 
 - **Decision:** Two services plus a worker from one repo: `apps/web` (Next.js 15.5.27), `apps/api` (Hono 4.13.13 on Node 24.19.0), `apps/worker` (BullMQ). Shared libraries in `packages/*` with an enforced import boundary.
 - **Consequences:** Realtime uptime is independent of web deploys; two services to deploy, secure, and observe; internal web→API calls cross the network, so auth must be verifiable from both.
 - **Alternatives:** Next.js API routes only (rejected: long-lived WebSocket + tier coupling); NestJS monolith (rejected: DI framework outweighs the problem); service-per-entity microservices (rejected: wrong granularity for three surfaces and one marketplace).
-- **Full discussion:** [01-tech-stack.md ADR-1](./01-tech-stack.md#adr-1-next-js-web-tier-plus-a-separate-hono-api-service-not-next-js-api-routes-only)
+- **Full discussion:** [01-tech-stack.md ADR-1](./01-tech-stack.md#adr-1--nextjs-web-tier-plus-a-separate-hono-api-service-not-nextjs-api-routes-only)
 
 ### ADR-0003 — PostgreSQL + PostGIS as the single source of truth
 
@@ -72,7 +72,7 @@ Running, numbered ADR log. Every decision the project makes gets an entry here, 
 - **Decision:** One Postgres + PostGIS holds orders, couriers, positions as `geography(Point,4326)`, proof records, the ledger, and the audit log. GiST spatial index plus `(status, last_seen_at)` composite index; distance selected only for ordering.
 - **Consequences:** No double-assignment, and joins/reconciliation in SQL; Redis may be added purely as a read-through cache for nearby-courier dashboards, never as authority.
 - **Alternatives:** Turbopuffer or a vector DB (rejected: similarity search, not transactional filtering); Redis geohash as authority (rejected: cannot express the composite filter or join atomically); Supabase-hosted Postgres (rejected as primary: multi-vendor split, no capability gain); Firestore GeoQuery (rejected: no cross-document transaction shape we need).
-- **Full discussion:** [01-tech-stack.md ADR-2](./01-tech-stack.md#adr-2-postgresql--postgis-not-a-hosted-geo-database)
+- **Full discussion:** [01-tech-stack.md ADR-2](./01-tech-stack.md#adr-2--postgresql--postgis-not-a-hosted-geo-database)
 
 ### ADR-0004 — Integer minor units with a hand-rolled double-entry ledger in Postgres
 
@@ -91,7 +91,7 @@ Running, numbered ADR log. Every decision the project makes gets an entry here, 
 - **Consequences:** Clean receipts and no per-order onboarding interruption; we absorb Stripe fees, chargebacks, and refund risk; Connect onboarding is a real flow in courier signup; Accounts v2 transition is tracked in [ADR-0023](#adr-0023--pin-the-stripe-api-version-and-migrate-onto-accounts-v2).
 - **Alternatives:** Direct charges (rejected: exposes the connected account per order, breaks the single receipt); destination charges with `application_fee_amount` (rejected: order creation fails if courier onboarding is incomplete, and matching is already the fragile step).
 - **Sources:** [Stripe Connect](https://docs.stripe.com/connect/) · [idempotent requests](https://docs.stripe.com/api/idempotent_requests)
-- **Full discussion:** [01-tech-stack.md ADR-3](./01-tech-stack.md#adr-3-stripe-connect-separate-charges-and-transfers)
+- **Full discussion:** [01-tech-stack.md ADR-3](./01-tech-stack.md#adr-3--stripe-connect-separate-charges-and-transfers)
 
 ### ADR-0006 — PWA-only, no native app for v1
 
@@ -101,7 +101,7 @@ Running, numbered ADR log. Every decision the project makes gets an entry here, 
 - **Consequences:** Guaranteed continuous background courier tracking on iOS is not achievable in a browser, so the product promises foreground tracking plus staleness honesty (see [ADR-0021](#adr-0021--foreground-tracking-plus-server-side-staleness-detection)). Install must be taught manually for iOS because `beforeinstallprompt` never fires there.
 - **Alternatives:** Capacitor/React Native wrapper now (rejected: app-store tooling, native toolchain, and background-location integration before we know we need them); PWA plus native in parallel (rejected: two product surfaces to keep honest with one team).
 - **Sources:** [web.dev iOS install](https://web.dev/learn/pwa/installation/#ios-installation) · [WebKit Geolocation](https://developer.apple.com/documentation/webkitjs/geolocation)
-- **Full discussion:** [00-product-brief.md A-09/A-10](./00-product-brief.md#1-assumptions) · [01-tech-stack.md ADR-5](./01-tech-stack.md#adr-5-hand-rolled-workbox-service-worker-not-ext-pwa)
+- **Full discussion:** [00-product-brief.md A-09/A-10](./00-product-brief.md#1-assumptions) · [01-tech-stack.md ADR-5](./01-tech-stack.md#adr-5--hand-rolled-workbox-service-worker-not-ext-pwa)
 
 ### ADR-0007 — WebSocket-primary tracking with SSE fallback
 
@@ -110,8 +110,8 @@ Running, numbered ADR log. Every decision the project makes gets an entry here, 
 - **Decision:** WebSocket rooms per `shipment:<id>` / `courier:<id>` at `/v1/stream`, automatic SSE fallback for one-way consumers, 5s polling as last resort. The ladder is invisible to the user; the connection indicator is visible. No correctness depends on any transport. Fan-out is coalesced to one message per room per 2 s.
 - **Consequences:** Two realtime transports plus a polling path to build and test; connection-state bugs are the main defect class and must be tested. Staleness is two-tier and server-authoritative: 60 s withdraws the customer ETA (`etaConfidence: 'unavailable'`), 120 s revokes the assignment and re-dispatches. Both thresholds are defined in [02-architecture.md](./02-architecture.md); this entry restates them and does not own them.
 - **Alternatives:** SSE only (rejected: acceptable for server→consumer, hence the fallback, but awkward as the primary); polling only (rejected: a visible product failure and a load multiplier); Firebase listeners (rejected: vendor-gated, cannot join our Postgres state); MQTT (rejected: an extra broker and auth surface for fan-out we already have).
-- **Sources:** [MDN WebSocket vs SSE](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_client_applications#differences-between-websocket-and-http) · [stack_report §3](../stack_report.md#3-tracking-architecture-consumer-server-fan-out)
-- **Full discussion:** [01-tech-stack.md ADR-4](./01-tech-stack.md#adr-4-websocket-primary-tracking-with-sse-fallback)
+- **Sources:** [MDN WebSocket vs SSE](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_client_applications#differences-between-websocket-and-http) · [stack_report §3](../stack_report.md#3-tracking-architecture-consumerserver-fan-out)
+- **Full discussion:** [01-tech-stack.md ADR-4](./01-tech-stack.md#adr-4--websocket-primary-tracking-with-sse-fallback)
 
 ### ADR-0008 — Hand-rolled Workbox service worker, not ext-pwa
 
@@ -121,14 +121,14 @@ Running, numbered ADR log. Every decision the project makes gets an entry here, 
 - **Consequences:** We own cache invalidation and SW bugs; CI must assert every precache revision matches a real built asset or a stale shell can ship forever; no feature may depend on the SW staying alive.
 - **Alternatives:** ext-pwa (rejected: limiting with App Router/Turbopack, wrong default caching); Serwist (deferred as a pre-agreed fallback, see [ADR-0027](#adr-0027--serwist-is-the-pre-agreed-sw-fallback-if-workbox-integration-fails)); no service worker (rejected: loses installability and offline queueing).
 - **Sources:** [Next.js PWA guide](https://nextjs.org/docs/app/guides/progressive-web-apps) · [Workbox](https://developer.chrome.com/docs/workbox/) · [MDN Web App Manifest](https://developer.mozilla.org/en-US/docs/Web/Manifest)
-- **Full discussion:** [01-tech-stack.md ADR-5](./01-tech-stack.md#adr-5-hand-rolled-workbox-service-worker-not-ext-pwa)
+- **Full discussion:** [01-tech-stack.md ADR-5](./01-tech-stack.md#adr-5--hand-rolled-workbox-service-worker-not-ext-pwa)
 
 ### ADR-0009 — Self-hosted Better Auth sessions in our own Postgres
 
 - **Status:** Accepted · **Date:** 2026-10-05 · **Deciders:** Engineering
 - **Context:** Three role-routed surfaces need role claims, long-lived courier sessions, and server-side invalidation, and session verification must work from `apps/api` as well as Next.js middleware.
 - **Decision:** Better Auth 1.7.7, self-hosted, sessions in our Postgres, roles `customer` / `courier` / `ops` / `admin`. Email + phone OTP at launch. The normative authorisation matrix lives in [02-architecture.md](./02-architecture.md), not here.
-- **Consequences:** Full control of session lifetime and recovery; we own the users/session tables and therefore the migration path if the vendor relationship changes (see [ADR-0026](#adr-0026--better-auth-post-vercel-acquisition-exit-plan)).
+- **Consequences:** Full control of session lifetime and recovery; we own the users/session tables and therefore the migration path if the vendor relationship changes (see [ADR-0026](#adr-0026--better-auth-post-acquisition-exit-plan)).
 - **Alternatives:** Auth.js v5 (rejected: maintenance mode, and Next-coupled); Clerk (rejected: managed directory and sessions as a vendor dependency); Lucia (rejected: deprecated); hand-rolled sessions (rejected: rotation and CSRF are not worth authoring).
 - **Sources:** [Better Auth](https://www.better-auth.com/) · [Vercel acquires Better Auth](https://vercel.com/blog/vercel-acquires-better-auth)
 - **Full discussion:** [01-tech-stack.md §2.1](./01-tech-stack.md#21-authentication)
@@ -169,7 +169,7 @@ Running, numbered ADR log. Every decision the project makes gets an entry here, 
 - **Consequences:** Assignment is race-free without advisory locks; a slow query shows up as matching latency, not as double-booking; freshness threshold is a product decision tied to [ADR-0021](#adr-0021--foreground-tracking-plus-server-side-staleness-detection).
 - **Alternatives:** Application-level locking (rejected: not race-free across processes); Redis-first geo (rejected as authority, see [ADR-0003](#adr-0003--postgresql--postgis-as-the-single-source-of-truth)); selecting `ST_Distance` in the `WHERE` clause (rejected: defeats the spatial index).
 - **Sources:** [PostGIS](https://postgis.net/) · [ST_DWithin](https://postgis.net/docs/ST_DWithin.html)
-- **Full discussion:** [01-tech-stack.md ADR-2](./01-tech-stack.md#adr-2-postgresql--postgis-not-a-hosted-geo-database)
+- **Full discussion:** [01-tech-stack.md ADR-2](./01-tech-stack.md#adr-2--postgresql--postgis-not-a-hosted-geo-database)
 
 ### ADR-0014 — Railway as the single hosting provider
 
@@ -205,7 +205,7 @@ Running, numbered ADR log. Every decision the project makes gets an entry here, 
 - **Decision:** Weekly settlement on a fixed schedule, with the pending balance, next transfer date, and minimum threshold visible to the courier at all times.
 - **Consequences:** Statement honesty becomes a product requirement (user story US-R7); a delayed or failed transfer must be surfaced immediately, never swallowed; the payable balance is a monitored metric.
 - **Alternatives:** Instant transfers per delivery (rejected: transfer-fee cost and failure surface at high frequency); monthly settlement (rejected: unacceptable trust cost for independent contractors).
-- **Full discussion:** [01-tech-stack.md ADR-3](./01-tech-stack.md#adr-3-stripe-connect-separate-charges-and-transfers)
+- **Full discussion:** [01-tech-stack.md ADR-3](./01-tech-stack.md#adr-3--stripe-connect-separate-charges-and-transfers)
 
 ### ADR-0018 — WebKit runs in CI from day one
 
@@ -252,7 +252,7 @@ Running, numbered ADR log. Every decision the project makes gets an entry here, 
 - **Blocked on:** A Iteration 4 spike measuring end-to-end courier→customer position latency and battery cost on a mid-range Android and an iPhone 13.
 - **Consequences if confirmed:** Simpler reconnect semantics and an IndexedDB replay queue that is trivially correct; the WebSocket tier becomes server→consumer only.
 - **Alternatives:** WebSocket for both directions (rejected for now: complexity without a measured need); long-polling (rejected: overhead and proxy timeouts).
-- **Full discussion:** [01-tech-stack.md ADR-4](./01-tech-stack.md#adr-4-websocket-primary-tracking-with-sse-fallback)
+- **Full discussion:** [01-tech-stack.md ADR-4](./01-tech-stack.md#adr-4--websocket-primary-tracking-with-sse-fallback)
 
 ### ADR-0023 — Pin the Stripe API version and migrate onto Accounts v2
 
@@ -263,7 +263,7 @@ Running, numbered ADR log. Every decision the project makes gets an entry here, 
 - **Consequences if confirmed:** Predictable webhook payloads and no surprise breaking change on upgrade; a migration note is required if any legacy shape leaks into stored payloads.
 - **Alternatives:** Rely on the SDK default version (rejected: implicit upgrades in a money path); stay on legacy account types (rejected: deprecated).
 - **Sources:** [Accounts v2 changelog](https://docs.stripe.com/changelog/clover/2025-12-15/accounts-v2) · [stack_report §7](../stack_report.md#7-open-questions)
-- **Full discussion:** [01-tech-stack.md ADR-3](./01-tech-stack.md#adr-3-stripe-connect-separate-charges-and-transfers)
+- **Full discussion:** [01-tech-stack.md ADR-3](./01-tech-stack.md#adr-3--stripe-connect-separate-charges-and-transfers)
 
 ### ADR-0024 — TypeScript 7.0 programmatic-API compatibility gate
 
@@ -306,7 +306,7 @@ Running, numbered ADR log. Every decision the project makes gets an entry here, 
 - **Blocked on:** The Iteration 0 build spike. Do not defer this decision past the first surface that needs the SW.
 - **Consequences if confirmed:** A 1–2 day switch cost decided in advance, instead of an open-ended workaround tax.
 - **Alternatives:** ext-pwa as a fallback (rejected: reintroduces exactly the limitation we are avoiding); no SW (rejected).
-- **Full discussion:** [01-tech-stack.md ADR-5](./01-tech-stack.md#adr-5-hand-rolled-workbox-service-worker-not-ext-pwa)
+- **Full discussion:** [01-tech-stack.md ADR-5](./01-tech-stack.md#adr-5--hand-rolled-workbox-service-worker-not-ext-pwa)
 
 ### ADR-0028 — Courier position history retention and downsampling
 
@@ -328,15 +328,18 @@ This log records decisions. Where another document owns a normative detail, the 
 |---|---|
 | Shipment entity, tables, state machine, enums, ledger schema | [03-data-model.md](./03-data-model.md) |
 | Dispatch algorithm, offer ladder and TTLs, staleness sweeps, event catalogue, trust boundaries, role set | [02-architecture.md](./02-architecture.md) |
-| Endpoints, error envelope, rate limits, authorisation matrix, idempotency | `03-api-contracts.md` (pending; see [README.md](./README.md#known-gaps-in-the-plan-as-of-2026-10-05)) |
-| Service worker, manifest, surfaces, offline behaviour | `04-frontend-pwa.md` (pending) |
-| Stripe Connect flows, settlement, reconciliation | `05-payments-and-ledger.md` (pending) |
-| Tracking pipeline detail, ETA model | `06-dispatch-and-tracking.md` (pending) |
-| Iteration plan and capacity | `07-roadmap.md` (pending) |
+| Endpoints, error envelope, rate limits, authorisation matrix, idempotency | [04-api-contract.md](./04-api-contract.md) |
+| AuthN and authZ matrix, session validation, CSRF, service-worker tokens | [04-api-contract.md §5](./04-api-contract.md#5-authn-and-authz); trust boundaries and the role set in [02-architecture.md §8](./02-architecture.md) |
+| Service worker, manifest, surfaces, offline behaviour | [06-frontend-architecture.md](./06-frontend-architecture.md) |
+| Stripe Connect account model | [01-tech-stack.md ADR-3](./01-tech-stack.md#adr-3--stripe-connect-separate-charges-and-transfers) |
+| Ledger, settlement, payout and reconciliation | [03-data-model.md](./03-data-model.md). No document yet owns the operational Stripe Connect flows end to end — see [README.md](./README.md#known-gaps-in-the-plan-as-of-2026-10-05) |
+| Tracking pipeline detail, ETA model | [05-realtime-and-tracking.md](./05-realtime-and-tracking.md) |
+| Dispatch and courier matching | [02-architecture.md §6](./02-architecture.md) |
+| Iteration plan and capacity | [07-roadmap.md](./07-roadmap.md) |
 | Test matrix and CI gating | [08-testing-strategy.md](./08-testing-strategy.md) |
 | Deployment, cost model, backups, retention | [09-infrastructure-and-cost.md](./09-infrastructure-and-cost.md) |
 | Risks and assumptions register | [10-risk-register.md](./10-risk-register.md) |
-| Launch gates and go/no-go | `11-launch-playbook.md` (pending) |
+| Launch gates and go/no-go | [11-launch-playbook.md](./11-launch-playbook.md) |
 
 Canonical vocabulary: the booked thing is a **`shipment`**; lifecycle states are `draft`, `quoted`, `payment_pending`, `booked`, `offer_pending`, `assigned`, `picked_up`, `in_transit`, `arrived`, `delivered`, `cancelled`, `failed`; roles are `customer`, `courier`, `ops`, `admin`. Older drafts of `00-product-brief.md` used "order" and a `searching` state — both are superseded by the above.
 
@@ -350,7 +353,7 @@ Carried deliberately unresolved. Each is tracked in [../stack_report.md §7](../
 |---|---|---|
 | TypeScript 7.0 programmatic-API compatibility with build plugins | [ADR-0024](#adr-0024--typescript-70-programmatic-api-compatibility-gate) | Iteration 0 CI |
 | Node 26 LTS entering 2026-10-28 | [ADR-0025](#adr-0025--keep-node-24-until-node-26-lts-is-proven-in-production) | One clean staging iteration on Node 26 |
-| Better Auth post-Vercel-acquisition stability | [ADR-0026](#adr-0026--better-auth-post-vercel-acquisition-exit-plan) | Licence change, breaking major, or loss of a self-hosted feature |
+| Better Auth post-Vercel-acquisition stability | [ADR-0026](#adr-0026--better-auth-post-acquisition-exit-plan) | Licence change, breaking major, or loss of a self-hosted feature |
 | Stripe Connect Accounts v2 transition | [ADR-0023](#adr-0023--pin-the-stripe-api-version-and-migrate-onto-accounts-v2) | Before the first live Connect transfer |
 | iOS background-tracking acceptance criteria | [ADR-0021](#adr-0021--foreground-tracking-plus-server-side-staleness-detection) and [ADR-0006](#adr-0006--pwa-only-no-native-app-for-v1) | Product sign-off on what promise is acceptable; reassess per courier complaint data |
 | Workbox vs. Serwist integration | [ADR-0027](#adr-0027--serwist-is-the-pre-agreed-sw-fallback-if-workbox-integration-fails) | Iteration 0 build spike |

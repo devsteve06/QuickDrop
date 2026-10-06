@@ -1152,7 +1152,7 @@ Every money-changing and status-changing operation carries the `request_id` that
 
 ## 9. Open questions carried forward
 
-These are open, not resolved. They are recorded here and in [`04-api-contract.md`](./04-api-contract.md#10-open-questions) so the sibling docs do not diverge.
+These are open, not resolved. They are recorded here and in [`04-api-contract.md`](./04-api-contract.md#10-open-questions-this-contract-blocks-on) so the sibling docs do not diverge.
 
 | ID | Question | Blocks | Owner suggestion |
 | --- | --- | --- | --- |

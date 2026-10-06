@@ -6,7 +6,7 @@ Sibling docs: [00-product-brief.md](./00-product-brief.md) · [01-tech-stack.md]
 
 Version claims are taken verbatim from [../stack_report.md](../stack_report.md) and are not re-researched here. Launch locale, launch currency and the tile provider are **not** decided; see §12.
 
-> **Naming note.** [./README.md](./README.md) reserves `04-frontend-pwa.md` for this surface and `05-payments-and-ledger.md` / `06-dispatch-and-tracking.md` for other surfaces. The filename requested for this work is `06-frontend-architecture.md`, so the `06` slot is contested and `04-frontend-pwa.md` has no file. Filenames were left exactly as requested; reconciling the index is a decision for the index owner.
+> **Naming note (resolved).** This document was written under the filename requested for it, `06-frontend-architecture.md`, which collided with an earlier index that had reserved `04-frontend-pwa.md` for this surface and `06` for dispatch and tracking. The filenames on disk are now canonical and the earlier reservations are withdrawn: the frontend is this document, realtime and tracking is [05-realtime-and-tracking.md](./05-realtime-and-tracking.md), and the API contract is [04-api-contract.md](./04-api-contract.md). Every cross-reference in the set has been repointed.
 
 ---
 
@@ -952,7 +952,7 @@ Rules that keep this suite honest:
 
 ### 12.2 Notes, not questions
 
-- The document filename collides with the `06` slot reserved in [./README.md](./README.md), and `04-frontend-pwa.md` has no file. Left as requested.
+- The filename collision that once left this surface without a slot in the index is resolved: this document is the canonical frontend reference. No `04-frontend-pwa.md` exists or is planned.
 - The launch-playbook flag `flag_tracking_live` has a UI consequence worth stating here: turning it off removes live updates and the UI shows status, last-known state and a manually managed ETA. Honest degradation beats a wrong map ([11-launch-playbook.md](./11-launch-playbook.md)).
 
 ---

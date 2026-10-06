@@ -22,7 +22,7 @@ There is no native mobile app. Both sides track the parcel live through WebSocke
 
 ## How to read the plan
 
-Twelve documents, roughly in the order below. Each says who it is for.
+Twelve documents plus a decision log, roughly in the order below. Each says who it is for.
 
 | Read in this order | Doc | Who it is for |
 |---|---|---|
@@ -30,12 +30,12 @@ Twelve documents, roughly in the order below. Each says who it is for.
 | 2 | [01-tech-stack.md](docs/01-tech-stack.md) | Engineers. Pinned versions and the ADRs explaining why the alternatives lost |
 | 3 | [DECISIONS.md](docs/DECISIONS.md) | Everyone. The running decision log; read the Status column before implementing |
 | 4 | [02-architecture.md](docs/02-architecture.md), [03-data-model.md](docs/03-data-model.md), [04-api-contract.md](docs/04-api-contract.md) | Engineers. The three documents you will use daily |
-| 5 | [05-auth-and-roles.md](docs/05-auth-and-roles.md), [06-tracking-and-eta.md](docs/06-tracking-and-eta.md), [07-payments-and-ledger.md](docs/07-payments-and-ledger.md), [08-dispatch-and-matching.md](docs/08-dispatch-and-matching.md), [09-frontend-and-pwa.md](docs/09-frontend-and-pwa.md) | Engineers. The surface you own |
-| 6 | [10-testing-quality-and-security.md](docs/10-testing-quality-and-security.md) | Engineers. Before your first PR |
-| 7 | [11-roadmap-and-iterations.md](docs/11-roadmap-and-iterations.md) | Everyone. The iteration plan and Definition of Done |
-| 8 | [08-testing-strategy.md](docs/08-testing-strategy.md), [09-infrastructure-and-cost.md](docs/09-infrastructure-and-cost.md), [10-risk-register.md](docs/10-risk-register.md), [11-launch-playbook.md](docs/11-launch-playbook.md) | Engineers and the founder. Operational set: how it is tested, hosted, paid for, risked, and launched |
+| 5 | [05-realtime-and-tracking.md](docs/05-realtime-and-tracking.md), [06-frontend-architecture.md](docs/06-frontend-architecture.md) | Engineers. The surface you own |
+| 6 | [08-testing-strategy.md](docs/08-testing-strategy.md) | Engineers. Before your first PR |
+| 7 | [07-roadmap.md](docs/07-roadmap.md) | Everyone. The iteration plan and Definition of Done |
+| 8 | [09-infrastructure-and-cost.md](docs/09-infrastructure-and-cost.md), [10-risk-register.md](docs/10-risk-register.md), [11-launch-playbook.md](docs/11-launch-playbook.md) | Engineers and the founder. Operational set: how it is hosted, paid for, risked, and launched |
 
-Documents 05 through 11 may not exist yet; they are being authored. A 404 means "still being written", not "wrong". Research input for every version claim lives in [stack_report.md](stack_report.md) and is not duplicated.
+Every document above is on disk and the filenames are canonical. Research input for each version claim lives in [stack_report.md](stack_report.md) and is not duplicated.
 
 ## Pinned stack
 
@@ -54,7 +54,7 @@ Verified 2026-09. Versions are not re-researched per document; they come from [s
 
 ## Iterations
 
-Nine iterations, approximately 14 weeks, small team, one city. Iteration 0 is bootstrap — a working skeleton, a green CI, and named risk retirements — not a feature iteration. The authoritative breakdown with per-iteration Definition of Done is in **[11-roadmap-and-iterations.md](docs/11-roadmap-and-iterations.md)**.
+Eleven iterations, I0–I10, over 14 weeks (2026-10-12 to 2027-01-10), small team, one city. Iteration 0 is bootstrap — a working skeleton, a green CI, and named risk retirements — not a feature iteration. Committed demand is 109 person-days against a 2-engineer capacity of 140. The authoritative breakdown with per-iteration Definition of Done is in **[07-roadmap.md](docs/07-roadmap.md)**; the critical path is I0 → I1 → I3 → I4 → I6 → I9 → I10.
 
 ## Running it
 

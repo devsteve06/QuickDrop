@@ -19,7 +19,7 @@ Anything in this brief that appears to add to, rename, or contradict one of thos
 
 ## 1. Assumptions
 
-Every assumption below is load-bearing. Each carries an ID so other docs can cite it instead of re-arguing it. Assumptions marked **OPEN** are not decided; they are carried forward and must be resolved before the iteration that depends on them (see [Open questions carried forward](#14-open-questions-carried-forward)).
+Every assumption below is load-bearing. Each carries an ID so other docs can cite it instead of re-arguing it. Assumptions marked **OPEN** are not decided; they are carried forward and must be resolved before the iteration that depends on them (see [Open questions carried forward](#11-open-questions-carried-forward)).
 
 | ID | Assumption | Why we are assuming it | Impact if wrong |
 |---|---|---|---|
@@ -67,7 +67,7 @@ The existing options all fail on at least one axis:
 
 ### Why an on-demand courier/parcel model specifically
 
-1. **It is a two-sided marketplace with a hard realtime loop.** The product is worthless without live position-to-ETA, and the ETA is worthless without map-matching. That realtime loop is the technical centre of gravity and the reason the stack is what it is. ([stack_report.md §3](../stack_report.md#3-tracking-architecture-consumer-server-fan-out))
+1. **It is a two-sided marketplace with a hard realtime loop.** The product is worthless without live position-to-ETA, and the ETA is worthless without map-matching. That realtime loop is the technical centre of gravity and the reason the stack is what it is. ([stack_report.md §3](../stack_report.md#3-tracking-architecture-consumerserver-fan-out))
 2. **Unit economics are simple and verifiable.** Small parcel, single courier, no consolidation. Revenue minus courier payout minus payment fees is a number we can compute per order.
 3. **The two-sided constraint is the hard part, not the mapping.** Matching, dispatch fairness, and courier supply are what kill on-demand marketplaces. Building the map is the easy 20%.
 4. **It forces iOS-web honesty.** Because guaranteed background tracking is impossible in a browser ([WebKit Geolocation](https://developer.apple.com/documentation/webkitjs/geolocation)), the product must be designed around *foreground* tracking plus *server-side staleness detection* rather than pretending otherwise. That constraint shapes the courier UX, the customer promise, and the ops tooling. It is an advantage: competitors who promise background tracking on iOS web will disappoint their users.
