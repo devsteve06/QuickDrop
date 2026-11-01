@@ -3,7 +3,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DB_PATH = path.join(__dirname, "..", "quickdrop.db");
+// QUICKDROP_DB lets tests (and alternative deployments) point at another file.
+const DB_PATH = process.env.QUICKDROP_DB
+  ? path.resolve(process.env.QUICKDROP_DB)
+  : path.join(__dirname, "..", "quickdrop.db");
 
 export const db = new DatabaseSync(DB_PATH);
 

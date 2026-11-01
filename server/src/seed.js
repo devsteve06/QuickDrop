@@ -1,3 +1,4 @@
+import { pathToFileURL } from "node:url";
 import { db } from "./db.js";
 
 const restaurants = [
@@ -59,22 +60,32 @@ const restaurants = [
   },
 ];
 
-db.exec("DELETE FROM order_items; DELETE FROM orders; DELETE FROM menu_items; DELETE FROM restaurants;");
-
-const insertRestaurant = db.prepare(
-  "INSERT INTO restaurants (name, cuisine, emoji, rating, delivery_fee, delivery_minutes) VALUES (?, ?, ?, ?, ?, ?)"
-);
-const insertItem = db.prepare(
-  "INSERT INTO menu_items (restaurant_id, name, description, price) VALUES (?, ?, ?, ?)"
-);
-
-for (const r of restaurants) {
-  const { lastInsertRowid } = insertRestaurant.run(
-    r.name, r.cuisine, r.emoji, r.rating, r.delivery_fee, r.delivery_minutes
+export function seedDatabase(database = db) {
+  database.exec(
+    "DELETE FROM order_items; DELETE FROM orders; DELETE FROM menu_items; DELETE FROM restaurants;"
   );
-  for (const [name, description, price] of r.menu) {
-    insertItem.run(lastInsertRowid, name, description, price);
+
+  const insertRestaurant = database.prepare(
+    "INSERT INTO restaurants (name, cuisine, emoji, rating, delivery_fee, delivery_minutes) VALUES (?, ?, ?, ?, ?, ?)"
+  );
+  const insertItem = database.prepare(
+    "INSERT INTO menu_items (restaurant_id, name, description, price) VALUES (?, ?, ?, ?)"
+  );
+
+  for (const r of restaurants) {
+    const { lastInsertRowid } = insertRestaurant.run(
+      r.name, r.cuisine, r.emoji, r.rating, r.delivery_fee, r.delivery_minutes
+    );
+    for (const [name, description, price] of r.menu) {
+      insertItem.run(lastInsertRowid, name, description, price);
+    }
   }
+
+  return restaurants.length;
 }
 
-console.log(`Seeded ${restaurants.length} restaurants.`);
+// Only run automatically when executed directly (`npm run seed`), not when imported by tests.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  const count = seedDatabase();
+  console.log(`Seeded ${count} restaurants.`);
+}
