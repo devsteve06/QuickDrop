@@ -2,6 +2,8 @@
 
 **Status: pre-implementation, planning only. No application code exists as of 2026-10-05.** This directory is the plan. Every version claim is taken verbatim from [../stack_report.md](../stack_report.md) and is not re-researched here.
 
+**Scope: this directory describes the courier/parcel product only.** The repository also contains an unrelated, runnable food-delivery MVP in [`../server`](../server) and [`../mobile`](../mobile), which is on a different stack (Express + SQLite + Expo) and implements none of this plan. [`../AGENTS.md`](../AGENTS.md) explains which track is which; do not treat the MVP as Iteration 0 of the roadmap below.
+
 **Iteration count: fixed — 11 iterations, I0–I10, over 14 weeks** (2026-10-12 to 2027-01-10). [07-roadmap.md](./07-roadmap.md) owns the count, the capacity model, and the per-iteration Definition of Done. Committed demand is 109 person-days against a 2-engineer capacity of 140 (78% utilisation, the remainder being the deliberate reserve for R-20). Critical path: **I0 → I1 → I3 → I4 → I6 → I9 → I10**; I2, I5, I7 and I8 have float.
 
 ---

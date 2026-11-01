@@ -4,9 +4,16 @@ On-demand courier and parcel pickup in one city: a customer requests a pickup at
 
 ## Status
 
-**Pre-implementation. Planning complete, zero application code.** There is no `package.json`, no database, no deploy, and no command in this repository that runs yet. What exists is the plan: the pinned stack, the architecture, the data model, the API contract, and the operational documentation.
+Two unrelated efforts share this repository. Check which one you are looking at before reading on:
 
-Start here: **[docs/README.md](docs/README.md)**.
+| Track | Where | Status |
+|---|---|---|
+| **Food-delivery MVP** | `server/`, `mobile/`, `client/`, [PLAN.md](PLAN.md) | Runnable. Expo SDK 58 app + Express/SQLite API; Phases 0–1 verified, 15 API tests passing |
+| **Courier/parcel PWA plan** (the rest of this file) | `docs/`, [stack_report.md](stack_report.md) | **Pre-implementation. Planning complete, zero application code.** No `package.json`, no database, no deploy |
+
+They describe different products on different stacks: the MVP is restaurant food delivery on Expo + Express + SQLite, shipping to iOS, Android and web; the plan below is parcel courier work on Next.js + Hono + PostgreSQL, shipping as a PWA. The MVP is **not** Iteration 0 of the plan, and the plan's roadmap does not track MVP work.
+
+Start here: **[AGENTS.md](AGENTS.md)** routes between the two, **[PLAN.md](PLAN.md)** is the MVP roadmap, and **[docs/README.md](docs/README.md)** is the courier plan.
 
 ## What we are building
 
@@ -58,9 +65,18 @@ Eleven iterations, I0–I10, over 14 weeks (2026-10-12 to 2027-01-10), small tea
 
 ## Running it
 
-**Nothing runs yet.** Iteration 0 has not started, so there is no command in this repository that will install, build, or serve the app. Do not follow instructions you find elsewhere in this repository that suggest otherwise.
+**The courier plan has nothing to run.** Iteration 0 has not started, so there is no command in `docs/` that will install, build, or serve the app described there. When Iteration 0 lands, the intent is a single command that brings up the whole stack — Postgres with PostGIS, Redis, and the three services — followed by a deterministic seed. The exact commands, the `compose.yaml` contents, and the migration and seeding workflow are specified in **[09-infrastructure-and-cost.md](docs/09-infrastructure-and-cost.md)** sections 2 and 3; treat that document as the specification to build against, not as a description of working software.
 
-When Iteration 0 lands, the intent is a single command that brings up the whole stack — Postgres with PostGIS, Redis, and the three services — followed by a deterministic seed. The exact commands, the `compose.yaml` contents, and the migration and seeding workflow are specified in **[09-infrastructure-and-cost.md](docs/09-infrastructure-and-cost.md)** sections 2 and 3; treat that document as the specification to build against, not as a description of working software.
+The **food-delivery MVP is runnable** from the repository root with Node >= 22.5:
+
+```bash
+npm run seed      # reset the local SQLite DB to 4 seeded restaurants
+npm run dev       # API on :4000 + Expo dev server
+npm run dev:web   # Expo web only
+npm test          # 15 API tests
+```
+
+See [AGENTS.md](AGENTS.md) for environment variables and the full command table.
 
 ## Known open questions
 
