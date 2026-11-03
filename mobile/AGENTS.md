@@ -13,15 +13,26 @@ Expo ships breaking changes every SDK release. APIs you remember are likely rena
 Use `bunx` instead of `npx` if the project uses bun (`bun.lock` present).
 
 ```bash
-npx expo install <package>  # ALWAYS use instead of npm/yarn/pnpm/bun add — resolves SDK-compatible versions
-npx expo start              # start the dev server
-npx expo lint               # lint
-npx tsc --noEmit            # typecheck
-npx expo-doctor             # diagnose dependency and config issues
-npx expo install --fix      # fix incompatible package versions
+npx expo install <package>   # ALWAYS use instead of npm/yarn/pnpm/bun add — resolves SDK-compatible versions
+npx expo start               # start the dev server
+npm run lint                 # ESLint (do NOT use `npx expo lint` here; see below)
+npm test                     # node --test over test/*.test.js
+npx expo-doctor              # diagnose dependency and config issues
+npx expo install --fix       # fix incompatible package versions
 ```
 
-Run lint and typecheck before declaring any task done.
+Run `npm run lint` and `npm test` before declaring any task done. There is no TypeScript in this
+project, so there is no typecheck step.
+
+`npx expo lint` fails here under ESLint 9 even though the config is valid — use `npm run lint`.
+
+## Tests
+
+`test/` holds `node --test` suites (`*.test.js`, run from `mobile/`). They cover pure modules
+only: `src/state/cartReducer.js` and `src/state/cartPersistence.js`. Do not import
+`@react-native-async-storage/async-storage`, `expo-router`, or anything else with native code
+into a test — the runner has no React Native environment. Screens, hooks, and `cartStorage.js`
+are verified manually in the app.
 
 ## Navigation & Routing
 

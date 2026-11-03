@@ -9,8 +9,11 @@
 - **Phase 3 — Browse & menu: ✅ done** (restaurant list, menu screen, quantity steppers, cross-restaurant
   confirm modal, loading/empty/retry states). Verified with lint, web export, and a reducer smoke test;
   the iOS/Android click-through is folded into the Phase 6 device matrix.
-- Phase 4–7: not started. The cart reducer and cart screen already exist because Phase 3 needed
-  add-to-cart; Phase 4 still owns persistence, rehydration, clearing on order, and reducer tests.
+- **Phase 4 — Cart & state: ✅ done** (versioned AsyncStorage key `quickdrop.cart.v1` with hydration on
+  launch, write-behind persistence that never blocks the flow, clearing when the cart empties, `hydrated`
+  flag so the cart screen does not flash an empty state, 32 mobile unit tests). The native
+  survive-a-kill verification is folded into the Phase 6 device matrix.
+- Phase 5–7: not started. Checkout, cross-platform polish, and release/docs are next.
 
 ## 1. Goal
 
@@ -145,6 +148,12 @@ and a test request to `/api/health` succeeds from both.
 
 **Done when:** cart survives an app reload; totals match the server's math to the cent.
 
+**Status:** done 2026-11-03. `cartReducer.js` owns `HYDRATE` + `normalizeCart`; `cartPersistence.js`
+is the pure serialize/parse layer (schema version 1, junk payloads discarded); `cartStorage.js` wraps
+AsyncStorage with a serialized write queue and swallows storage failures. Clearing on successful order
+is wired in Phase 5, where orders exist. Covered by `mobile/test/` (32 tests: reducer, invariants,
+hydration, persistence round-trip and corruption).
+
 ### Phase 5 — Checkout & order (1–1.5 days)
 - Checkout form: name, address, phone; inline validation; keyboard avoidance (`KeyboardAvoidingView`).
 - Place order → `POST /api/orders` → `POST /api/orders/:id/pay` → navigate to `/order/[id]`.
@@ -219,10 +228,10 @@ Statuses for MVP: `pending_payment` → `preparing`. Later phases add `out_for_d
 
 ## 9. Immediate next step
 
-Execute **Phase 4 — Cart & state**. The pure reducer (`mobile/src/state/cartReducer.js`) and the cart
-screen landed with Phase 3, so Phase 4 is the remaining work: AsyncStorage persistence with a versioned
-key, rehydration on launch, clearing on successful order, reducer unit tests, and a native verification
-pass.
+Execute **Phase 5 — Checkout & order**. Phase 4 closed cart persistence (see its Status note); the
+remaining gap in the MVP flow is the checkout form and the order/confirmation screens, which are still
+placeholders at `mobile/src/app/checkout.jsx` and `mobile/src/app/order/[id].jsx`. Both API endpoints
+already exist and are tested server-side.
 
 Phase 2 was a hard prerequisite for Phase 3 (API client, theme, components, `CartProvider`, route
 shell), so both phases landed together on 2026-11-03.

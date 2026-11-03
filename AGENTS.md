@@ -22,14 +22,13 @@ It is a different product on a different stack and now lives outside the repo, i
 | 1 — API MVP-complete | ✅ Done | `/api/health`, binds `0.0.0.0`, hardened validation, 15 passing tests |
 | 2 — Expo foundation | ✅ Done | API client, theme/components, `CartProvider`, platform alerts, route shell |
 | 3 — Browse & menu | ✅ Done | Restaurant list, menu, steppers, cross-restaurant confirm, loading/empty/retry |
-| 4 — Cart & state | ⬜ Next | Persistence, rehydration, reducer tests (reducer + cart screen already exist) |
+| 4 — Cart & state | ✅ Done | Versioned AsyncStorage persistence, rehydration, `hydrated` gate, 32 mobile unit tests |
 | 5–7 | ⬜ Not started | Checkout, cross-platform polish, docs/release |
 
 Verified at this checkpoint:
-- `npm test` (in `server/`) → 15 tests, 4 suites, all passing.
+- `npm test` → 15 server tests + 32 mobile tests, all passing.
 - `npm run lint` (in `mobile/`) → exit 0.
 - `npx expo export --platform web` → success (803 modules).
-- Cart reducer smoke test (add/inc/dec/remove/replace, money rounding) → all assertions passed.
 - `npx expo-doctor` → 20/20 checks passed (last run 2026-11-01).
 
 ## Repo layout
@@ -46,6 +45,7 @@ quickdrop/
 ├── mobile/                  Expo app — iOS / Android / web
 │   ├── src/app/             Expo Router routes (_layout.jsx, index.jsx, …)
 │   ├── src/                 non-route code (api, state, components, theme)
+│   ├── test/                node --test suites for pure cart modules
 │   ├── app.json             Expo config (scheme, expo-router plugin)
 │   ├── .env.example         EXPO_PUBLIC_API_URL for web/simulator/device
 │   └── AGENTS.md            Expo-specific agent rules
@@ -65,7 +65,7 @@ Run from the repo root unless noted.
 | `npm run dev:app` | Expo dev server only |
 | `npm run dev:web` | Expo web only |
 | `npm run seed` | Reset the local DB to the 4 seeded restaurants (wipes orders) |
-| `npm test` | API tests (delegates to `server/`) |
+| `npm test` | Both suites: API tests (`server/`) then cart tests (`mobile/test/`) |
 | `npm run lint --prefix mobile` | ESLint for the Expo app |
 | `npm run export:web --prefix mobile` | Static web build into `mobile/dist/` |
 
@@ -102,9 +102,14 @@ Requirements: **Node >= 22.5** (`node:sqlite`). Node 24.22 is the verified runti
   Never send prices from the client. Keep rounding to 2 dp server-side.
 - **Errors:** throw `HttpError(status, message)` in `server/src/app.js`; the handler returns JSON.
   Unknown errors log server-side and return a generic 500.
-- **Tests:** use `QUICKDROP_DB` pointed at a temp file; call `seedDatabase(db)`, then close and
-  delete the file. Never test against `quickdrop.db`.
+- **Tests:** server tests use `QUICKDROP_DB` pointed at a temp file; call `seedDatabase(db)`, then
+  close and delete the file. Never test against `quickdrop.db`. Mobile tests live in
+  `mobile/test/` (`node --test`, `*.test.js`) and cover pure modules only — `cartReducer.js` and
+  `cartPersistence.js`. Anything importing AsyncStorage or a React Native module is exercised
+  manually, because there is no native test harness.
 - **Persistence:** the DB file is gitignored. A fresh clone must run `npm run seed`.
+- **Cart storage:** `quickdrop.cart.v1` is versioned. Changing the persisted shape means bumping
+  `CART_SCHEMA_VERSION` (and the key suffix) so older payloads are discarded, not coerced.
 - **Native folders:** `ios/` and `android/` are generated (CNG). Configure native behavior in
   `app.json` / config plugins; never edit generated folders by hand.
 - **Legacy client:** `client/` is frozen. Do not add features there; delete it in Phase 7 after

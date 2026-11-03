@@ -22,7 +22,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "export:web": "expo export --platform web",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "node --test \"test/*.test.js\""
   },
   "private": true,
   "devDependencies": {

@@ -12,6 +12,54 @@ export const emptyCart = {
 
 const clampQty = (qty) => Math.min(Math.max(qty, 1), MAX_QTY);
 
+const isPositiveInt = (value) => Number.isInteger(value) && value > 0;
+
+function normalizeLine(line) {
+  if (!line || typeof line !== "object") return null;
+
+  const id = Number(line.id);
+  const price = Number(line.price);
+  const qty = Number(line.qty);
+
+  if (!isPositiveInt(id)) return null;
+  if (typeof line.name !== "string" || !line.name.trim()) return null;
+  if (!Number.isFinite(price) || price < 0) return null;
+  if (!isPositiveInt(qty)) return null;
+
+  return { id, name: line.name, price: round2(price), qty: clampQty(qty) };
+}
+
+/**
+ * Turns untrusted data (a persisted cart from an older build, a hand-edited
+ * AsyncStorage value) into a cart this app can render. Anything unrecognisable
+ * collapses to an empty cart rather than throwing.
+ */
+export function normalizeCart(value) {
+  if (!value || typeof value !== "object") return emptyCart;
+
+  const restaurantId = Number(value.restaurantId);
+  if (!isPositiveInt(restaurantId)) return emptyCart;
+
+  const seen = new Set();
+  const items = [];
+  for (const line of Array.isArray(value.items) ? value.items : []) {
+    const clean = normalizeLine(line);
+    if (!clean || seen.has(clean.id)) continue;
+    seen.add(clean.id);
+    items.push(clean);
+  }
+  if (items.length === 0) return emptyCart;
+
+  const fee = Number(value.deliveryFee);
+  return {
+    restaurantId,
+    restaurantName: typeof value.restaurantName === "string" ? value.restaurantName : "",
+    restaurantEmoji: typeof value.restaurantEmoji === "string" ? value.restaurantEmoji : "",
+    deliveryFee: Number.isFinite(fee) && fee >= 0 ? round2(fee) : 0,
+    items,
+  };
+}
+
 /**
  * Pure cart reducer. The single-restaurant invariant lives here, not in the UI:
  * ADD refuses items from a different restaurant. The UI asks the user first, then
@@ -67,6 +115,14 @@ export function cartReducer(state, action) {
 
     case "CLEAR":
       return emptyCart;
+
+    // Restores a persisted cart after launch. Ignored if the user already added
+    // something while storage was still loading, so a slow disk read can never
+    // clobber fresh input.
+    case "HYDRATE": {
+      if (state.items.length > 0) return state;
+      return normalizeCart(action.cart);
+    }
 
     case "REPLACE_RESTAURANT": {
       const { restaurant, item } = action;

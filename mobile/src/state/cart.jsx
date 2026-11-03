@@ -1,4 +1,12 @@
-import { createContext, useCallback, useContext, useMemo, useReducer } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from "react";
 import {
   cartReducer,
   emptyCart,
@@ -6,11 +14,38 @@ import {
   selectSubtotal,
   selectTotal,
 } from "./cartReducer";
+import { loadStoredCart, saveStoredCart } from "./cartStorage";
 
 const CartContext = createContext(null);
 
 export function CartProvider({ children }) {
   const [cart, dispatch] = useReducer(cartReducer, emptyCart);
+
+  // False until the persisted cart has been read (or found to be absent). Screens
+  // use it to tell "empty cart" apart from "we do not know yet".
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      const stored = await loadStoredCart();
+      if (cancelled) return;
+      if (stored) dispatch({ type: "HYDRATE", cart: stored });
+      setHydrated(true);
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Only persist after hydration, otherwise the initial empty cart would wipe
+  // the stored one before it is read back.
+  useEffect(() => {
+    if (!hydrated) return;
+    saveStoredCart(cart);
+  }, [cart, hydrated]);
 
   const addItem = useCallback((restaurant, item) => {
     dispatch({ type: "ADD", restaurant, item });
@@ -26,6 +61,7 @@ export function CartProvider({ children }) {
   const value = useMemo(
     () => ({
       cart,
+      hydrated,
       addItem,
       increment,
       decrement,
@@ -37,7 +73,7 @@ export function CartProvider({ children }) {
       total: selectTotal(cart),
       qtyFor: (id) => cart.items.find((line) => line.id === id)?.qty ?? 0,
     }),
-    [cart, addItem, increment, decrement, removeItem, clearCart, replaceWithItem]
+    [cart, hydrated, addItem, increment, decrement, removeItem, clearCart, replaceWithItem]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

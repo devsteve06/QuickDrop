@@ -12,10 +12,12 @@ No accounts, no real payment gateway, no courier tracking — those are post-MVP
 |---|---|---|
 | 0 — Decisions & scaffold | Done | Expo SDK 58, Expo Router entry, web export verified |
 | 1 — API MVP-complete | Done | `/api/health`, hardened validation, 15 passing tests |
-| 2 — Expo foundation | Next | API client, theme/components, `CartProvider`, platform alerts |
-| 3–7 | Not started | Browse/menu, cart, checkout, polish, release |
+| 2 — Expo foundation | Done | API client, theme/components, `CartProvider`, platform alerts |
+| 3 — Browse & menu | Done | Restaurant list, menu, steppers, cross-restaurant confirm |
+| 4 — Cart & state | Done | Cart survives reload (versioned AsyncStorage), 32 mobile unit tests |
+| 5–7 | Next | Checkout/order, cross-platform polish, release |
 
-Verified at the last checkpoint: `npm test` 15/15 passing · mobile lint exit 0 ·
+Verified at the last checkpoint: `npm test` 15 server + 32 mobile passing · mobile lint exit 0 ·
 `expo export --platform web` succeeded · `expo-doctor` 20/20.
 
 ## Quick start
@@ -34,7 +36,7 @@ Then open the app in Expo Go, a simulator, or the browser.
 |---|---|
 | `npm run dev` | API + Expo together |
 | `npm run dev:web` | Expo web only |
-| `npm test` | API tests (temp DB, never `quickdrop.db`) |
+| `npm test` | Both test suites (server API + mobile cart) |
 | `npm run lint --prefix mobile` | ESLint for the app |
 | `npm run export:web --prefix mobile` | Static web build into `mobile/dist/` |
 

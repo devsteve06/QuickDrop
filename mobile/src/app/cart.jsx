@@ -12,7 +12,7 @@ import { colors, spacing, typography } from "../theme";
 
 export default function CartScreen() {
   const router = useRouter();
-  const { cart, increment, decrement, removeItem, clearCart, itemCount, subtotal, total } =
+  const { cart, hydrated, increment, decrement, removeItem, clearCart, itemCount, subtotal, total } =
     useCart();
   const [dialog, confirm] = useConfirm();
 
@@ -24,6 +24,14 @@ export default function CartScreen() {
       destructive: true,
     });
     if (confirmed) clearCart();
+  }
+
+  if (!hydrated) {
+    return (
+      <Screen>
+        <StateView loading title="Loading your cart" />
+      </Screen>
+    );
   }
 
   if (itemCount === 0) {
