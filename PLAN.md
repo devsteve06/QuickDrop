@@ -4,7 +4,13 @@
 
 - **Phase 0 — Decisions & scaffolding: ✅ done** (Expo SDK 58 app in `mobile/`, Expo Router entry, web export verified)
 - **Phase 1 — API MVP-complete: ✅ done** (`/api/health`, binds `0.0.0.0`, hardened validation, 15 API tests passing)
-- Phases 2–7: not started.
+- **Phase 2 — Expo foundation: ✅ done** (API client with timeout/error extraction, theme tokens, shared
+  components, `CartProvider`, platform alert helper, five-route shell)
+- **Phase 3 — Browse & menu: ✅ done** (restaurant list, menu screen, quantity steppers, cross-restaurant
+  confirm modal, loading/empty/retry states). Verified with lint, web export, and a reducer smoke test;
+  the iOS/Android click-through is folded into the Phase 6 device matrix.
+- Phase 4–7: not started. The cart reducer and cart screen already exist because Phase 3 needed
+  add-to-cart; Phase 4 still owns persistence, rehydration, clearing on order, and reducer tests.
 
 ## 1. Goal
 
@@ -213,5 +219,10 @@ Statuses for MVP: `pending_payment` → `preparing`. Later phases add `out_for_d
 
 ## 9. Immediate next step
 
-Confirm §7, then execute **Phase 0 + Phase 1** (scaffold `mobile/`, add `/api/health`, bind `0.0.0.0`,
-add API tests). That unblocks all UI work and makes the existing API device-reachable.
+Execute **Phase 4 — Cart & state**. The pure reducer (`mobile/src/state/cartReducer.js`) and the cart
+screen landed with Phase 3, so Phase 4 is the remaining work: AsyncStorage persistence with a versioned
+key, rehydration on launch, clearing on successful order, reducer unit tests, and a native verification
+pass.
+
+Phase 2 was a hard prerequisite for Phase 3 (API client, theme, components, `CartProvider`, route
+shell), so both phases landed together on 2026-11-03.

@@ -14,20 +14,23 @@ An unrelated plan for a courier/parcel-pickup PWA briefly lived in `docs/` in th
 It is a different product on a different stack and now lives outside the repo, in the sibling
 `quickdrop-courier-plan` folder. Do not reintroduce it here; this repository is food delivery only.
 
-## Current status (2026-11-01)
+## Current status (2026-11-03)
 
 | Phase | State | Notes |
 |---|---|---|
 | 0 — Decisions & scaffold | ✅ Done | Expo SDK 58 app in `mobile/`, Expo Router entry, web export verified |
 | 1 — API MVP-complete | ✅ Done | `/api/health`, binds `0.0.0.0`, hardened validation, 15 passing tests |
-| 2 — Expo foundation | ⬜ Next | API client, theme/components, `CartProvider`, platform alerts |
-| 3–7 | ⬜ Not started | Browse/menu, cart, checkout, polish, docs/release |
+| 2 — Expo foundation | ✅ Done | API client, theme/components, `CartProvider`, platform alerts, route shell |
+| 3 — Browse & menu | ✅ Done | Restaurant list, menu, steppers, cross-restaurant confirm, loading/empty/retry |
+| 4 — Cart & state | ⬜ Next | Persistence, rehydration, reducer tests (reducer + cart screen already exist) |
+| 5–7 | ⬜ Not started | Checkout, cross-platform polish, docs/release |
 
 Verified at this checkpoint:
 - `npm test` (in `server/`) → 15 tests, 4 suites, all passing.
 - `npm run lint` (in `mobile/`) → exit 0.
-- `npx expo export --platform web` → success (781 modules, 3 bundles).
-- `npx expo-doctor` → 20/20 checks passed.
+- `npx expo export --platform web` → success (803 modules).
+- Cart reducer smoke test (add/inc/dec/remove/replace, money rounding) → all assertions passed.
+- `npx expo-doctor` → 20/20 checks passed (last run 2026-11-01).
 
 ## Repo layout
 
