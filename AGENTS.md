@@ -23,10 +23,13 @@ It is a different product on a different stack and now lives outside the repo, i
 | 2 — Expo foundation | ✅ Done | API client, theme/components, `CartProvider`, platform alerts, route shell |
 | 3 — Browse & menu | ✅ Done | Restaurant list, menu, steppers, cross-restaurant confirm, loading/empty/retry |
 | 4 — Cart & state | ✅ Done | Versioned AsyncStorage persistence, rehydration, `hydrated` gate, 32 mobile unit tests |
-| 5–7 | ⬜ Not started | Checkout, cross-platform polish, docs/release |
+| 5 — Checkout & order | ✅ Done | Validated guest form, server-priced order, simulated payment, confirmation + payment retry |
+| 6–7 | ⬜ Not started | Cross-platform polish/QA, then release/docs |
 
 Verified at this checkpoint:
-- `npm test` → 15 server tests + 32 mobile tests, all passing.
+- `npm test` → 15 server tests + 52 mobile tests, all passing.
+- Full order flow exercised against the real API on a throwaway DB: create → pay → fetch, totals
+  matching the client to the cent, a tampered price ignored, a second `/pay` returning 409.
 - `npm run lint` (in `mobile/`) → exit 0.
 - `npx expo export --platform web` → success (803 modules).
 - `npx expo-doctor` → 20/20 checks passed (last run 2026-11-01).
@@ -104,9 +107,10 @@ Requirements: **Node >= 22.5** (`node:sqlite`). Node 24.22 is the verified runti
   Unknown errors log server-side and return a generic 500.
 - **Tests:** server tests use `QUICKDROP_DB` pointed at a temp file; call `seedDatabase(db)`, then
   close and delete the file. Never test against `quickdrop.db`. Mobile tests live in
-  `mobile/test/` (`node --test`, `*.test.js`) and cover pure modules only — `cartReducer.js` and
-  `cartPersistence.js`. Anything importing AsyncStorage or a React Native module is exercised
-  manually, because there is no native test harness.
+  `mobile/test/` (`node --test`, `*.test.js`) and cover pure modules only — the cart reducer and
+  persistence, checkout validation, the create→pay orchestration, and formatters. Anything importing
+  AsyncStorage or a React Native module is exercised manually, because there is no native test
+  harness.
 - **Persistence:** the DB file is gitignored. A fresh clone must run `npm run seed`.
 - **Cart storage:** `quickdrop.cart.v1` is versioned. Changing the persisted shape means bumping
   `CART_SCHEMA_VERSION` (and the key suffix) so older payloads are discarded, not coerced.

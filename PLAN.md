@@ -13,7 +13,11 @@
   launch, write-behind persistence that never blocks the flow, clearing when the cart empties, `hydrated`
   flag so the cart screen does not flash an empty state, 32 mobile unit tests). The native
   survive-a-kill verification is folded into the Phase 6 device matrix.
-- Phase 5–7: not started. Checkout, cross-platform polish, and release/docs are next.
+- **Phase 5 — Checkout & order: ✅ done** (validated guest form, server-priced order, simulated payment,
+  confirmation with status/ETA/itemised totals, retry that never duplicates an order, 20 more unit
+  tests). The create→pay→confirm flow was also exercised end-to-end against the real API on a
+  throwaway database; the iOS/Android click-through stays in the Phase 6 device matrix.
+- Phase 6–7: not started. Cross-platform polish/QA, then release/docs.
 
 ## 1. Goal
 
@@ -164,6 +168,14 @@ hydration, persistence round-trip and corruption).
 
 **Done when:** a full order completes on iOS, Android, and web from a clean install.
 
+**Status:** done 2026-11-03, with the device matrix deferred to Phase 6. `lib/checkoutValidation.js`
+mirrors the server's field rules so the form and the API cannot disagree; `api/orderFlow.js` keeps
+"create failed" and "pay failed" apart, so a failed payment keeps the order id and retries the payment
+instead of creating a second order. A 409 from `/pay` is read as "already paid" (the lost-response
+case). The order screen also offers payment for an order left in `pending_payment`, so that state is
+not a dead end. Covered by `mobile/test/checkoutValidation.test.js`, `orderFlow.test.js`, and
+`format.test.js`.
+
 ### Phase 6 — Cross-platform polish & QA (1–2 days)
 - Safe areas (`react-native-safe-area-context`), web max-width container, touch targets ≥44 px.
 - Accessibility: roles/labels on interactive elements, focus order on web, dynamic type tolerance.
@@ -222,16 +234,17 @@ Statuses for MVP: `pending_payment` → `preparing`. Later phases add `out_for_d
 | SQLite file resets on some hosts | Lost orders in demo | Accept for MVP; note managed Postgres as the post-MVP step |
 | `node:sqlite` needs Node ≥ 22.5 | Deploy failure | Add `engines`; pin runtime in deploy config |
 | Float money math | Off-by-a-cent totals | Server rounds to 2 dp; consider integer cents post-MVP |
+| No idempotency key on `POST /api/orders` | A create that times out after the row is written can be retried into a duplicate order | Accepted for the MVP; the post-MVP fix is a client-supplied idempotency key stored with the order. Payment is protected: a second `/pay` returns 409 |
 | Two clients during migration | Wasted effort/confusion | Freeze `client/` at parity; delete it in Phase 7 |
 | `npx expo install` fails under npm 11.19 when a user-level `allow-scripts` is set (`EALLOWSCRIPTS`) | Dependency installs blocked | Add packages with `npm install` using the SDK-compatible versions Expo resolved (see `mobile/package.json`), or run with a clean `npm_config_userconfig` |
 | Scope creep (accounts, tracking) | MVP slips | Out-of-scope list in §2 is binding until acceptance criteria pass |
 
 ## 9. Immediate next step
 
-Execute **Phase 5 — Checkout & order**. Phase 4 closed cart persistence (see its Status note); the
-remaining gap in the MVP flow is the checkout form and the order/confirmation screens, which are still
-placeholders at `mobile/src/app/checkout.jsx` and `mobile/src/app/order/[id].jsx`. Both API endpoints
-already exist and are tested server-side.
+Execute **Phase 6 — Cross-platform polish & QA**. Phases 4 and 5 closed the functional gap; what is
+left is the device matrix, safe areas, accessibility, and the offline/error-boundary pass. The
+functional flow — browse → menu → cart → checkout → payment → confirmation — is complete and was
+verified end-to-end against the API on a throwaway database.
 
 Phase 2 was a hard prerequisite for Phase 3 (API client, theme, components, `CartProvider`, route
 shell), so both phases landed together on 2026-11-03.

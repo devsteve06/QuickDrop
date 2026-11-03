@@ -29,10 +29,10 @@ project, so there is no typecheck step.
 ## Tests
 
 `test/` holds `node --test` suites (`*.test.js`, run from `mobile/`). They cover pure modules
-only: `src/state/cartReducer.js` and `src/state/cartPersistence.js`. Do not import
-`@react-native-async-storage/async-storage`, `expo-router`, or anything else with native code
-into a test — the runner has no React Native environment. Screens, hooks, and `cartStorage.js`
-are verified manually in the app.
+only: the cart reducer and persistence, `lib/checkoutValidation.js`, `api/orderFlow.js`, and
+`lib/format.js`. Do not import `@react-native-async-storage/async-storage`, `expo-router`, or
+anything else with native code into a test — the runner has no React Native environment. Screens,
+hooks, and `cartStorage.js` are verified manually in the app.
 
 ## Navigation & Routing
 

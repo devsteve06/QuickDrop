@@ -15,10 +15,12 @@ No accounts, no real payment gateway, no courier tracking — those are post-MVP
 | 2 — Expo foundation | Done | API client, theme/components, `CartProvider`, platform alerts |
 | 3 — Browse & menu | Done | Restaurant list, menu, steppers, cross-restaurant confirm |
 | 4 — Cart & state | Done | Cart survives reload (versioned AsyncStorage), 32 mobile unit tests |
-| 5–7 | Next | Checkout/order, cross-platform polish, release |
+| 5 — Checkout & order | Done | Guest checkout, server-priced order, simulated payment, confirmation |
+| 6–7 | Next | Cross-platform polish/QA, then release |
 
-Verified at the last checkpoint: `npm test` 15 server + 32 mobile passing · mobile lint exit 0 ·
-`expo export --platform web` succeeded · `expo-doctor` 20/20.
+Verified at the last checkpoint: `npm test` 15 server + 52 mobile passing · full order flow exercised
+against the real API on a throwaway DB · mobile lint exit 0 · `expo export --platform web` succeeded ·
+`expo-doctor` 20/20.
 
 ## Quick start
 
