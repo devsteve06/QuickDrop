@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useCart } from "../state/cart";
-import { colors, radius, spacing, typography } from "../theme";
+import { colors, focusRing, layout, radius, spacing, typography } from "../theme";
 
 export default function CartButton() {
   const router = useRouter();
@@ -12,8 +12,12 @@ export default function CartButton() {
       onPress={() => router.push("/cart")}
       accessibilityRole="button"
       accessibilityLabel={itemCount > 0 ? `Cart, ${itemCount} items` : "Cart, empty"}
-      hitSlop={8}
-      style={({ pressed }) => [styles.button, pressed && styles.pressed]}
+      accessibilityHint="Opens your cart"
+      style={({ pressed, focused }) => [
+        styles.button,
+        pressed && styles.pressed,
+        focused && styles.focused,
+      ]}
     >
       <Text style={styles.icon}>🛒</Text>
       {itemCount > 0 ? (
@@ -27,8 +31,8 @@ export default function CartButton() {
 
 const styles = StyleSheet.create({
   button: {
-    width: 44,
-    height: 44,
+    width: layout.minTouchTarget,
+    height: layout.minTouchTarget,
     alignItems: "center",
     justifyContent: "center",
     marginRight: spacing.xs,
@@ -36,6 +40,10 @@ const styles = StyleSheet.create({
   },
   pressed: {
     backgroundColor: colors.surfaceMuted,
+  },
+  focused: {
+    backgroundColor: colors.surfaceMuted,
+    ...focusRing,
   },
   icon: {
     fontSize: 20,
@@ -45,7 +53,8 @@ const styles = StyleSheet.create({
     top: 2,
     right: 0,
     minWidth: 18,
-    height: 18,
+    minHeight: 18,
+    paddingVertical: 1,
     paddingHorizontal: 4,
     borderRadius: radius.pill,
     backgroundColor: colors.primary,

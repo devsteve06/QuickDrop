@@ -70,5 +70,13 @@ export const shadows = {
 
 export const layout = {
   maxContentWidth: 1040,
+  maxFormWidth: 720,
   maxCartBarWidth: 640,
+  minTouchTarget: 44,
+};
+
+// Visible keyboard-focus ring for web/desktop and hardware keyboards. `boxShadow`
+// keeps the ring out of layout, so focused controls never shift their neighbours.
+export const focusRing = {
+  boxShadow: "0 0 0 3px rgba(15, 23, 42, 0.28)",
 };

@@ -18,7 +18,7 @@ import TextField from "../components/TextField";
 import { toOrderPayload, validateCheckout } from "../lib/checkoutValidation";
 import { formatMoney, pluralize } from "../lib/format";
 import { useCart } from "../state/cart";
-import { colors, radius, spacing, typography } from "../theme";
+import { colors, layout, radius, spacing, typography } from "../theme";
 
 const EMPTY_FIELDS = { customerName: "", address: "", phone: "" };
 
@@ -138,7 +138,9 @@ export default function CheckoutScreen() {
           keyboardDismissMode="on-drag"
         >
           <Card style={styles.card}>
-            <Text style={styles.cardTitle}>Delivery details</Text>
+            <Text style={styles.cardTitle} accessibilityRole="header">
+              Delivery details
+            </Text>
             <Text style={styles.cardHint}>
               {pendingOrderId
                 ? "This order already exists, so its details are locked."
@@ -184,9 +186,13 @@ export default function CheckoutScreen() {
 
           <Card style={styles.card}>
             <View style={styles.restaurantRow}>
-              <Text style={styles.restaurantEmoji}>{cart.restaurantEmoji || "🍽️"}</Text>
+              <Text style={styles.restaurantEmoji} accessible={false}>
+                {cart.restaurantEmoji || "🍽️"}
+              </Text>
               <View style={styles.restaurantBody}>
-                <Text style={styles.restaurantName}>{cart.restaurantName}</Text>
+                <Text style={styles.restaurantName} accessibilityRole="header">
+                  {cart.restaurantName}
+                </Text>
                 <Text style={styles.restaurantMeta}>{pluralize(itemCount, "item")}</Text>
               </View>
             </View>
@@ -270,6 +276,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
+    width: "100%",
+    maxWidth: layout.maxFormWidth,
+    alignSelf: "center",
     padding: spacing.lg,
     paddingBottom: spacing.xxl,
     gap: spacing.md,

@@ -6,7 +6,7 @@ iOS, Android, and the web; a small Express + SQLite API prices and stores orders
 
 No accounts, no real payment gateway, no courier tracking — those are post-MVP.
 
-## Status (2026-11-03)
+## Status (2026-11-09)
 
 | Phase | State | Notes |
 |---|---|---|
@@ -16,11 +16,16 @@ No accounts, no real payment gateway, no courier tracking — those are post-MVP
 | 3 — Browse & menu | Done | Restaurant list, menu, steppers, cross-restaurant confirm |
 | 4 — Cart & state | Done | Cart survives reload (versioned AsyncStorage), 32 mobile unit tests |
 | 5 — Checkout & order | Done | Guest checkout, server-priced order, simulated payment, confirmation |
-| 6–7 | Next | Cross-platform polish/QA, then release |
+| 6 — Cross-platform polish | Done (code) | Safe areas, responsive widths, 44 px targets, a11y, error boundary, offline banner; manual device matrix pending |
+| 7 | Next | Docs, release build, delete the legacy `client/` |
 
-Verified at the last checkpoint: `npm test` 15 server + 52 mobile passing · full order flow exercised
-against the real API on a throwaway DB · mobile lint exit 0 · `expo export --platform web` succeeded ·
-`expo-doctor` 20/20.
+Verified at this checkpoint: `npm test` 15 server + 52 mobile passing · mobile lint exit 0 ·
+`expo export --platform web` succeeded (822 modules) · `expo-doctor` 20/20.
+
+The app now shows a global banner when the device is offline, recovers from render errors with a
+retry screen instead of a white page, and falls back to a not-found screen for bad links. Android
+dev builds allow plain-HTTP LAN traffic (`android.usesCleartextTraffic`) so a physical device can
+reach `http://<LAN-IP>:4000`; remove that once the API is served over HTTPS.
 
 ## Quick start
 

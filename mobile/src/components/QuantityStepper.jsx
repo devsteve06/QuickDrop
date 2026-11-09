@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { colors, radius, spacing, typography } from "../theme";
+import { colors, focusRing, layout, radius, spacing, typography } from "../theme";
 
 export default function QuantityStepper({
   qty,
@@ -20,17 +20,21 @@ export default function QuantityStepper({
         accessibilityRole="button"
         accessibilityLabel={`Decrease ${label} quantity`}
         accessibilityState={{ disabled: !canDecrement }}
-        hitSlop={6}
-        style={({ pressed }) => [
+        style={({ pressed, focused }) => [
           styles.button,
           !canDecrement && styles.buttonDisabled,
           pressed && canDecrement && styles.buttonPressed,
+          focused && styles.buttonFocused,
         ]}
       >
         <Text style={[styles.symbol, !canDecrement && styles.symbolDisabled]}>−</Text>
       </Pressable>
 
-      <Text style={styles.qty} accessibilityLabel={`Quantity ${qty}`}>
+      <Text
+        style={styles.qty}
+        accessibilityLabel={`Quantity ${qty}`}
+        accessibilityLiveRegion="polite"
+      >
         {qty}
       </Text>
 
@@ -40,11 +44,11 @@ export default function QuantityStepper({
         accessibilityRole="button"
         accessibilityLabel={`Increase ${label} quantity`}
         accessibilityState={{ disabled: !canIncrement }}
-        hitSlop={6}
-        style={({ pressed }) => [
+        style={({ pressed, focused }) => [
           styles.button,
           !canIncrement && styles.buttonDisabled,
           pressed && canIncrement && styles.buttonPressed,
+          focused && styles.buttonFocused,
         ]}
       >
         <Text style={[styles.symbol, !canIncrement && styles.symbolDisabled]}>+</Text>
@@ -61,12 +65,12 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: radius.pill,
     backgroundColor: colors.surface,
-    padding: 3,
-    gap: spacing.sm,
+    padding: 2,
+    gap: spacing.xs,
   },
   button: {
-    width: 32,
-    height: 32,
+    width: layout.minTouchTarget,
+    height: layout.minTouchTarget,
     borderRadius: radius.pill,
     alignItems: "center",
     justifyContent: "center",
@@ -77,6 +81,10 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: {
     backgroundColor: colors.surface,
+  },
+  buttonFocused: {
+    backgroundColor: colors.primarySoft,
+    ...focusRing,
   },
   symbol: {
     fontSize: 18,

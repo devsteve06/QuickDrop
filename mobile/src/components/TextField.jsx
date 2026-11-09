@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
-import { colors, radius, spacing, typography } from "../theme";
+import { useId, useState } from "react";
+import { Platform, StyleSheet, Text, TextInput, View } from "react-native";
+import { colors, focusRing, radius, spacing, typography } from "../theme";
 
 export default function TextField({
   label,
@@ -13,12 +13,24 @@ export default function TextField({
   ...inputProps
 }) {
   const [focused, setFocused] = useState(false);
+  const hintId = useId();
+  const describedBy = error || helper ? hintId : undefined;
+
+  // ARIA-only props: react-native-web forwards them to the DOM, while native
+  // uses accessibilityHint below.
+  const webAria =
+    Platform.OS === "web"
+      ? { "aria-invalid": Boolean(error), "aria-describedby": describedBy }
+      : null;
 
   return (
     <View style={[styles.wrap, style]}>
       {label ? <Text style={styles.label}>{label}</Text> : null}
       <TextInput
         {...inputProps}
+        {...webAria}
+        accessibilityLabel={inputProps.accessibilityLabel ?? label}
+        accessibilityHint={error ?? helper}
         placeholderTextColor={colors.textSubtle}
         onFocus={(event) => {
           setFocused(true);
@@ -31,9 +43,18 @@ export default function TextField({
         style={[styles.input, focused && styles.inputFocused, error && styles.inputError, inputStyle]}
       />
       {error ? (
-        <Text style={styles.error}>{error}</Text>
+        <Text
+          nativeID={hintId}
+          style={styles.error}
+          accessibilityLiveRegion="polite"
+          accessibilityRole="alert"
+        >
+          {error}
+        </Text>
       ) : helper ? (
-        <Text style={styles.helper}>{helper}</Text>
+        <Text nativeID={hintId} style={styles.helper}>
+          {helper}
+        </Text>
       ) : null}
     </View>
   );
@@ -60,6 +81,7 @@ const styles = StyleSheet.create({
   },
   inputFocused: {
     borderColor: colors.primary,
+    ...focusRing,
   },
   inputError: {
     borderColor: colors.danger,

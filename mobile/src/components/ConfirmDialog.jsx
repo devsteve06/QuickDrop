@@ -26,8 +26,9 @@ export default function ConfirmDialog({
           onPress={onCancel}
           accessibilityRole="button"
           accessibilityLabel="Dismiss dialog"
+          tabIndex={-1}
         />
-        <View style={styles.dialog} accessibilityRole="alert">
+        <View style={styles.dialog} accessibilityRole="alert" accessibilityViewIsModal>
           <Text style={styles.title}>{title}</Text>
           {message ? <Text style={styles.message}>{message}</Text> : null}
           <View style={styles.actions}>

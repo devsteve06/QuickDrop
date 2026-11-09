@@ -1,5 +1,5 @@
 import { ActivityIndicator, Pressable, StyleSheet, Text } from "react-native";
-import { colors, radius, spacing } from "../theme";
+import { colors, focusRing, layout, radius, spacing } from "../theme";
 
 const VARIANTS = {
   primary: {
@@ -49,7 +49,7 @@ export default function Button({
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel ?? title}
       accessibilityState={{ disabled: isDisabled, busy: loading }}
-      style={({ pressed }) => [
+      style={({ pressed, focused }) => [
         styles.base,
         size === "sm" && styles.small,
         fullWidth && styles.fullWidth,
@@ -58,11 +58,12 @@ export default function Button({
           borderColor: palette.border,
         },
         isDisabled && styles.disabled,
+        focused && styles.focused,
         style,
       ]}
     >
       {loading ? (
-        <ActivityIndicator size="small" color={palette.text} />
+        <ActivityIndicator size="small" color={palette.text} accessibilityLabel="Working" />
       ) : (
         <Text style={[styles.label, size === "sm" && styles.labelSmall, { color: palette.text }]}>
           {title}
@@ -75,6 +76,7 @@ export default function Button({
 const styles = StyleSheet.create({
   base: {
     minHeight: 48,
+    paddingVertical: spacing.sm,
     paddingHorizontal: spacing.lg,
     borderRadius: radius.md,
     borderWidth: 1,
@@ -82,7 +84,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   small: {
-    minHeight: 38,
+    minHeight: layout.minTouchTarget,
     paddingHorizontal: spacing.md,
     borderRadius: radius.sm,
   },
@@ -92,9 +94,14 @@ const styles = StyleSheet.create({
   disabled: {
     opacity: 0.5,
   },
+  focused: {
+    borderColor: colors.text,
+    ...focusRing,
+  },
   label: {
     fontSize: 16,
     fontWeight: "600",
+    textAlign: "center",
   },
   labelSmall: {
     fontSize: 14,

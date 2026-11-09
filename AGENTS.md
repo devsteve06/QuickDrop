@@ -14,7 +14,7 @@ An unrelated plan for a courier/parcel-pickup PWA briefly lived in `docs/` in th
 It is a different product on a different stack and now lives outside the repo, in the sibling
 `quickdrop-courier-plan` folder. Do not reintroduce it here; this repository is food delivery only.
 
-## Current status (2026-11-03)
+## Current status (2026-11-09)
 
 | Phase | State | Notes |
 |---|---|---|
@@ -24,15 +24,18 @@ It is a different product on a different stack and now lives outside the repo, i
 | 3 — Browse & menu | ✅ Done | Restaurant list, menu, steppers, cross-restaurant confirm, loading/empty/retry |
 | 4 — Cart & state | ✅ Done | Versioned AsyncStorage persistence, rehydration, `hydrated` gate, 32 mobile unit tests |
 | 5 — Checkout & order | ✅ Done | Validated guest form, server-priced order, simulated payment, confirmation + payment retry |
-| 6–7 | ⬜ Not started | Cross-platform polish/QA, then release/docs |
+| 6 — Cross-platform polish | ✅ Done (code) | Safe areas, web max widths, 44 px targets, a11y/focus, error boundary, offline banner, Android cleartext dev config |
+| 7 | ⬜ Not started | Device/browser matrix (manual), docs, release build, delete legacy `client/` |
 
 Verified at this checkpoint:
 - `npm test` → 15 server tests + 52 mobile tests, all passing.
 - Full order flow exercised against the real API on a throwaway DB: create → pay → fetch, totals
   matching the client to the cent, a tampered price ignored, a second `/pay` returning 409.
 - `npm run lint` (in `mobile/`) → exit 0.
-- `npx expo export --platform web` → success (803 modules).
-- `npx expo-doctor` → 20/20 checks passed (last run 2026-11-01).
+- `npx expo export --platform web` → success (822 modules).
+- `npx expo-doctor` → 20/20 checks passed (2026-11-09).
+- Still manual: iOS simulator, Android emulator, iOS/Android device, Chrome + Safari (desktop and
+  mobile widths), VoiceOver/TalkBack, and large-text settings.
 
 ## Repo layout
 

@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { formatMoney } from "../lib/format";
-import { colors, radius, shadows, spacing, typography } from "../theme";
+import { colors, focusRing, radius, shadows, spacing, typography } from "../theme";
 
 export default function RestaurantCard({ restaurant }) {
   const router = useRouter();
@@ -15,17 +15,18 @@ export default function RestaurantCard({ restaurant }) {
       }
       accessibilityRole="button"
       accessibilityLabel={`${restaurant.name}, ${restaurant.cuisine}, rated ${rating.toFixed(1)}, ${restaurant.delivery_minutes} minutes, ${fee} delivery`}
-      style={({ pressed }) => [styles.card, pressed && styles.pressed]}
+      accessibilityHint="Opens the menu"
+      style={({ pressed, focused }) => [styles.card, pressed && styles.pressed, focused && styles.focused]}
     >
       <View style={styles.emojiWrap}>
         <Text style={styles.emoji}>{restaurant.emoji}</Text>
       </View>
 
       <View style={styles.body}>
-        <Text style={styles.name} numberOfLines={1}>
+        <Text style={styles.name} numberOfLines={2}>
           {restaurant.name}
         </Text>
-        <Text style={styles.cuisine} numberOfLines={1}>
+        <Text style={styles.cuisine} numberOfLines={2}>
           {restaurant.cuisine}
         </Text>
         <View style={styles.stats}>
@@ -58,6 +59,10 @@ const styles = StyleSheet.create({
   pressed: {
     borderColor: colors.primary,
     backgroundColor: colors.primarySoft,
+  },
+  focused: {
+    borderColor: colors.primary,
+    ...focusRing,
   },
   emojiWrap: {
     width: 56,

@@ -8,7 +8,7 @@ import { showAlert } from "../../lib/alerts";
 import { formatMoney } from "../../lib/format";
 import { useConfirm } from "../../lib/useConfirm";
 import { MAX_QTY, useCart } from "../../state/cart";
-import { colors, layout, radius, shadows, spacing, typography } from "../../theme";
+import { colors, focusRing, layout, radius, shadows, spacing, typography } from "../../theme";
 
 export default function RestaurantScreen() {
   const { id } = useLocalSearchParams();
@@ -118,7 +118,12 @@ export default function RestaurantScreen() {
             onPress={() => router.push("/cart")}
             accessibilityRole="button"
             accessibilityLabel={`View cart, ${cart.itemCount} items, ${formatMoney(cart.total)}`}
-            style={({ pressed }) => [styles.cartBar, pressed && styles.cartBarPressed]}
+            accessibilityHint="Opens your cart"
+            style={({ pressed, focused }) => [
+              styles.cartBar,
+              pressed && styles.cartBarPressed,
+              focused && styles.cartBarFocused,
+            ]}
           >
             <View style={styles.cartCount}>
               <Text style={styles.cartCountText}>{cart.itemCount}</Text>
@@ -135,8 +140,12 @@ export default function RestaurantScreen() {
 function RestaurantHeader({ restaurant }) {
   return (
     <View style={styles.header}>
-      <Text style={styles.headerEmoji}>{restaurant.emoji}</Text>
-      <Text style={styles.headerName}>{restaurant.name}</Text>
+      <Text style={styles.headerEmoji} accessible={false}>
+        {restaurant.emoji}
+      </Text>
+      <Text style={styles.headerName} accessibilityRole="header">
+        {restaurant.name}
+      </Text>
       <Text style={styles.headerCuisine}>{restaurant.cuisine}</Text>
 
       <View style={styles.stats}>
@@ -156,7 +165,9 @@ function RestaurantHeader({ restaurant }) {
         </View>
       </View>
 
-      <Text style={styles.sectionTitle}>Menu</Text>
+      <Text style={styles.sectionTitle} accessibilityRole="header">
+        Menu
+      </Text>
     </View>
   );
 }
@@ -188,7 +199,9 @@ const styles = StyleSheet.create({
   stats: {
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.xl,
+    flexWrap: "wrap",
+    columnGap: spacing.xl,
+    rowGap: spacing.md,
     marginTop: spacing.md,
     padding: spacing.lg,
     borderRadius: radius.lg,
@@ -234,11 +247,17 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
     paddingHorizontal: spacing.lg,
     borderRadius: radius.pill,
+    borderWidth: 1,
+    borderColor: "transparent",
     backgroundColor: colors.primary,
     ...shadows.floating,
   },
   cartBarPressed: {
     backgroundColor: colors.primaryPressed,
+  },
+  cartBarFocused: {
+    borderColor: colors.textInverse,
+    ...focusRing,
   },
   cartCount: {
     minWidth: 26,

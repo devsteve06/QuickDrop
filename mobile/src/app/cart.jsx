@@ -8,7 +8,7 @@ import StateView from "../components/StateView";
 import { formatMoney } from "../lib/format";
 import { useConfirm } from "../lib/useConfirm";
 import { useCart } from "../state/cart";
-import { colors, spacing, typography } from "../theme";
+import { colors, layout, spacing, typography } from "../theme";
 
 export default function CartScreen() {
   const router = useRouter();
@@ -49,13 +49,17 @@ export default function CartScreen() {
   }
 
   return (
-    <Screen>
+    <Screen maxWidth={layout.maxFormWidth}>
       {dialog}
 
       <View style={styles.restaurantRow}>
-        <Text style={styles.restaurantEmoji}>{cart.restaurantEmoji || "🍽️"}</Text>
+        <Text style={styles.restaurantEmoji} accessible={false}>
+          {cart.restaurantEmoji || "🍽️"}
+        </Text>
         <View style={styles.restaurantBody}>
-          <Text style={styles.restaurantName}>{cart.restaurantName}</Text>
+          <Text style={styles.restaurantName} accessibilityRole="header">
+            {cart.restaurantName}
+          </Text>
           <Text style={styles.restaurantMeta}>
             {itemCount} {itemCount === 1 ? "item" : "items"} · {formatMoney(cart.deliveryFee)}{" "}
             delivery

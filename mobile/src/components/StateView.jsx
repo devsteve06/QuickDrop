@@ -13,13 +13,19 @@ export default function StateView({
   onSecondaryAction,
 }) {
   return (
-    <View style={styles.wrap}>
+    <View style={styles.wrap} accessibilityLiveRegion="polite">
       {loading ? (
-        <ActivityIndicator size="large" color={colors.primary} />
+        <ActivityIndicator size="large" color={colors.primary} accessibilityLabel="Loading" />
       ) : (
-        <Text style={styles.emoji}>{emoji}</Text>
+        <Text style={styles.emoji} accessible={false}>
+          {emoji}
+        </Text>
       )}
-      {title ? <Text style={styles.title}>{title}</Text> : null}
+      {title ? (
+        <Text style={styles.title} accessibilityRole="header">
+          {title}
+        </Text>
+      ) : null}
       {message ? <Text style={styles.message}>{message}</Text> : null}
       {actionLabel && onAction ? (
         <Button title={actionLabel} onPress={onAction} style={styles.action} />

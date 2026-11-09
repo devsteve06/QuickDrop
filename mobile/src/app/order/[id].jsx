@@ -10,7 +10,7 @@ import Screen from "../../components/Screen";
 import StateView from "../../components/StateView";
 import { formatMoney, formatOrderTime, pluralize } from "../../lib/format";
 import { useCart } from "../../state/cart";
-import { colors, radius, spacing, typography } from "../../theme";
+import { colors, layout, radius, spacing, typography } from "../../theme";
 
 const STATUS = {
   pending_payment: { label: "Awaiting payment", tone: "warning" },
@@ -88,10 +88,17 @@ export default function OrderScreen() {
     <Screen padded={false}>
       <ScrollView contentContainerStyle={styles.content}>
         <Card style={styles.hero}>
-          <Text style={styles.emoji}>{order.restaurant?.emoji || "🍽️"}</Text>
-          <Text style={styles.title}>Order #{order.id}</Text>
+          <Text style={styles.emoji} accessible={false}>
+            {order.restaurant?.emoji || "🍽️"}
+          </Text>
+          <Text style={styles.title} accessibilityRole="header">
+            Order #{order.id}
+          </Text>
           <View style={[styles.badge, styles[`badge_${badge.tone}`]]}>
-            <Text style={[styles.badgeText, styles[`badgeText_${badge.tone}`]]}>
+            <Text
+              style={[styles.badgeText, styles[`badgeText_${badge.tone}`]]}
+              accessibilityLiveRegion="polite"
+            >
               {badge.label}
             </Text>
           </View>
@@ -108,7 +115,9 @@ export default function OrderScreen() {
 
         <Card style={styles.card}>
           <View style={styles.cardHeader}>
-            <Text style={styles.cardTitle}>{order.restaurant?.name ?? "Your items"}</Text>
+            <Text style={styles.cardTitle} accessibilityRole="header">
+              {order.restaurant?.name ?? "Your items"}
+            </Text>
             <Text style={styles.cardMeta}>{pluralize(itemCount, "item")}</Text>
           </View>
           <View style={styles.lines}>
@@ -139,7 +148,9 @@ export default function OrderScreen() {
         </Card>
 
         <Card style={styles.card}>
-          <Text style={styles.cardTitle}>Delivering to</Text>
+          <Text style={styles.cardTitle} accessibilityRole="header">
+            Delivering to
+          </Text>
           <Text style={styles.deliveryName}>{order.customer_name}</Text>
           <Text style={styles.deliveryAddress}>{order.address}</Text>
           {order.phone ? <Text style={styles.deliveryMeta}>{order.phone}</Text> : null}
@@ -177,6 +188,9 @@ export default function OrderScreen() {
 
 const styles = StyleSheet.create({
   content: {
+    width: "100%",
+    maxWidth: layout.maxFormWidth,
+    alignSelf: "center",
     padding: spacing.lg,
     paddingBottom: spacing.xxl,
     gap: spacing.md,

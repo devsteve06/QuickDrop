@@ -17,7 +17,11 @@
   confirmation with status/ETA/itemised totals, retry that never duplicates an order, 20 more unit
   tests). The create→pay→confirm flow was also exercised end-to-end against the real API on a
   throwaway database; the iOS/Android click-through stays in the Phase 6 device matrix.
-- Phase 6–7: not started. Cross-platform polish/QA, then release/docs.
+- **Phase 6 — Cross-platform polish & QA: ✅ done (code side)** (safe areas, web max-width containers,
+  44 px touch targets, accessibility roles/labels/focus rings, dynamic-type tolerance, route error
+  boundary + not-found screen, global offline banner, Android cleartext dev config). The manual
+  simulator/device/browser matrix still has to be run by a human — see the Phase 6 status note.
+- Phase 7: not started. Docs/release build and deleting the legacy `client/`.
 
 ## 1. Goal
 
@@ -185,6 +189,30 @@ not a dead end. Covered by `mobile/test/checkoutValidation.test.js`, `orderFlow.
 
 **Done when:** the matrix passes with no layout breaks, unhandled exceptions, or dead-end states.
 
+**Status:** implementation done 2026-11-09; manual matrix pending a human with simulators/devices.
+
+- `Screen` wraps every route in `SafeAreaView` (bottom edge only — the native stack header owns the
+  top inset), and both floating banners offset by `useSafeAreaInsets().top`.
+- Long-form screens (`cart`, `checkout`, `order/[id]`) cap at `layout.maxFormWidth` (720 px) and the
+  home grid collapses to one column when `fontScale > 1.3`, so large text does not crush cards.
+- All interactive controls are ≥44 px (`layout.minTouchTarget`), including the small Button size,
+  the quantity stepper, the cart button, and the alert dismiss button.
+- Accessibility: heading roles on screen titles/sections, richer button/card labels and hints,
+  `accessibilityViewIsModal` on the confirm dialog, live regions on transient status text, and a
+  visible `focusRing` (a `boxShadow`, because react-native-web ignores outline props) for keyboard
+  focus on web.
+- Failure handling: Expo Router's exported `ErrorBoundary` in `src/app/_layout.jsx` renders
+  `ErrorFallback` with a retry that keeps the cart, `+not-found.jsx` catches bad links, and
+  `OfflineBanner` uses `expo-network` to explain why requests fail while the device is disconnected.
+- Android dev builds allow plain-HTTP LAN traffic via `expo-build-properties`
+  (`android.usesCleartextTraffic: true`). This is a development convenience for reaching
+  `http://<LAN-IP>:4000`; it should be removed or narrowed once the API is HTTPS.
+- Verified: `npm test` (15 server + 52 mobile), `npm run lint --prefix mobile` exit 0,
+  `npx expo-doctor` 20/20, `npm run export:web --prefix mobile` bundles 822 modules.
+- Still manual: iOS simulator, Android emulator, iOS/Android physical device (including a cart
+  survive-a-kill check and the cleartext LAN request), plus Chrome and Safari at desktop and mobile
+  widths with VoiceOver/TalkBack and large-text settings.
+
 ### Phase 7 — Tests, docs, release build (1 day)
 - Unit-test the cart reducer; API tests from Phase 1.
 - `README.md`: prerequisites, install, seed, env config, run on web/iOS/Android, API contract, troubleshooting.
@@ -237,14 +265,20 @@ Statuses for MVP: `pending_payment` → `preparing`. Later phases add `out_for_d
 | No idempotency key on `POST /api/orders` | A create that times out after the row is written can be retried into a duplicate order | Accepted for the MVP; the post-MVP fix is a client-supplied idempotency key stored with the order. Payment is protected: a second `/pay` returns 409 |
 | Two clients during migration | Wasted effort/confusion | Freeze `client/` at parity; delete it in Phase 7 |
 | `npx expo install` fails under npm 11.19 when a user-level `allow-scripts` is set (`EALLOWSCRIPTS`) | Dependency installs blocked | Add packages with `npm install` using the SDK-compatible versions Expo resolved (see `mobile/package.json`), or run with a clean `npm_config_userconfig` |
+| Android dev builds allow cleartext HTTP | A shipped build would permit unencrypted traffic | Scoped as a development convenience for LAN API access; remove `usesCleartextTraffic` (or move to a dev-only build profile) when the API is served over HTTPS |
 | Scope creep (accounts, tracking) | MVP slips | Out-of-scope list in §2 is binding until acceptance criteria pass |
 
 ## 9. Immediate next step
 
-Execute **Phase 6 — Cross-platform polish & QA**. Phases 4 and 5 closed the functional gap; what is
-left is the device matrix, safe areas, accessibility, and the offline/error-boundary pass. The
-functional flow — browse → menu → cart → checkout → payment → confirmation — is complete and was
-verified end-to-end against the API on a throwaway database.
+Execute **Phase 7 — Tests, docs, release build**. Phase 6 landed the cross-platform polish (safe
+areas, responsive max widths, touch targets, accessibility, error boundary, offline banner, Android
+cleartext dev config); the remaining work there is the manual simulator/device/browser matrix, which
+needs hardware this environment does not have.
+
+Phase 7 is now unblocked: delete the legacy `client/` app, finish the README/troubleshooting pass,
+and produce the static web export plus internal EAS preview builds. The functional flow — browse →
+menu → cart → checkout → payment → confirmation — is complete and was verified end-to-end against
+the API on a throwaway database.
 
 Phase 2 was a hard prerequisite for Phase 3 (API client, theme, components, `CartProvider`, route
 shell), so both phases landed together on 2026-11-03.

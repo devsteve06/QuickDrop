@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { subscribeToAlerts } from "../lib/alerts";
-import { colors, radius, shadows, spacing, typography } from "../theme";
+import { colors, focusRing, radius, shadows, spacing, typography } from "../theme";
 
 const DISMISS_AFTER_MS = 5000;
+const HEADER_HEIGHT = 64;
 
 export default function AlertHost() {
   const [notice, setNotice] = useState(null);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => subscribeToAlerts(setNotice), []);
 
@@ -19,8 +22,11 @@ export default function AlertHost() {
   if (!notice) return null;
 
   return (
-    <View pointerEvents="box-none" style={styles.host}>
-      <View style={styles.banner} accessibilityRole="alert">
+    <View
+      pointerEvents="box-none"
+      style={[styles.host, { top: insets.top + HEADER_HEIGHT }]}
+    >
+      <View style={styles.banner} accessibilityRole="alert" accessibilityLiveRegion="polite">
         <View style={styles.body}>
           <Text style={styles.title}>{notice.title}</Text>
           {notice.message ? <Text style={styles.message}>{notice.message}</Text> : null}
@@ -30,6 +36,7 @@ export default function AlertHost() {
           accessibilityRole="button"
           accessibilityLabel="Dismiss notification"
           hitSlop={8}
+          style={({ focused }) => [styles.closeButton, focused && styles.focused]}
         >
           <Text style={styles.close}>✕</Text>
         </Pressable>
@@ -41,7 +48,6 @@ export default function AlertHost() {
 const styles = StyleSheet.create({
   host: {
     position: "absolute",
-    top: spacing.md,
     left: spacing.lg,
     right: spacing.lg,
     alignItems: "center",
@@ -71,6 +77,21 @@ const styles = StyleSheet.create({
   message: {
     ...typography.small,
     color: colors.textMuted,
+  },
+  closeButton: {
+    width: 44,
+    height: 44,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: -spacing.sm,
+    marginRight: -spacing.sm,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    borderColor: "transparent",
+  },
+  focused: {
+    borderColor: colors.primary,
+    ...focusRing,
   },
   close: {
     fontSize: 16,

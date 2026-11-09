@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   action: {
+    flexShrink: 0,
     alignItems: "flex-end",
   },
 });

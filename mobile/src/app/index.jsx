@@ -10,10 +10,17 @@ const THREE_COLUMN_MIN_WIDTH = 1024;
 
 export default function HomeScreen() {
   const { status, data, error, retry } = useRestaurants();
-  const { width } = useWindowDimensions();
+  const { width, fontScale } = useWindowDimensions();
 
-  const columns =
-    width >= THREE_COLUMN_MIN_WIDTH ? 3 : width >= TWO_COLUMN_MIN_WIDTH ? 2 : 1;
+  // A multi-column grid becomes cramped when the user has large text enabled.
+  const wideText = fontScale > 1.3;
+  const columns = wideText
+    ? 1
+    : width >= THREE_COLUMN_MIN_WIDTH
+      ? 3
+      : width >= TWO_COLUMN_MIN_WIDTH
+        ? 2
+        : 1;
 
   if (status === "loading" && !data) {
     return (
@@ -55,7 +62,9 @@ export default function HomeScreen() {
         ListHeaderComponent={
           <View style={styles.header}>
             <Text style={styles.kicker}>QUICKDROP</Text>
-            <Text style={styles.title}>What are you hungry for?</Text>
+            <Text style={styles.title} accessibilityRole="header">
+              What are you hungry for?
+            </Text>
             <Text style={styles.subtitle}>
               {restaurants.length > 0
                 ? `${restaurants.length} restaurants near you.`
