@@ -21,15 +21,18 @@
   44 px touch targets, accessibility roles/labels/focus rings, dynamic-type tolerance, route error
   boundary + not-found screen, global offline banner, Android cleartext dev config). The manual
   simulator/device/browser matrix still has to be run by a human — see the Phase 6 status note.
-- Phase 7: not started. Docs/release build and deleting the legacy `client/`.
+- **Phase 7 — Tests, docs, release build: ✅ done** (README rewrite with prerequisites, per-target
+  run instructions, API contract, web release, EAS preview builds, and troubleshooting; legacy
+  `client/` deleted; `mobile/eas.json` preview profiles; web export + `expo serve` scripts). The
+  Phase 6 device/browser matrix remains manual and is the only outstanding QA item.
 
 ## 1. Goal
 
 Ship a **guest-checkout food delivery MVP** from a **single React Native codebase** that runs on
 iOS, Android, and the web (via `react-native-web`), backed by the existing Express + SQLite API.
 
-The current `client/` is a React DOM/Vite app. It proves the flow but cannot run on mobile.
-The MVP replaces it with an Expo app; the server is kept and hardened.
+The original `client/` was a React DOM/Vite app. It proved the flow but could not run on mobile,
+so the MVP replaced it with an Expo app; the server was kept and hardened.
 
 **MVP means:** a user can browse restaurants, build a cart, check out with delivery details,
 place an order with simulated payment, and see a confirmed order with status and ETA — on phone and web.
@@ -72,8 +75,8 @@ quickdrop/
 │   │   ├── components/          # Button, TextField, QuantityStepper, Card, StateViews
 │   │   └── theme.js             # spacing, colors, typography tokens
 │   ├── app.json
+│   ├── eas.json                 # internal-preview build profiles
 │   └── package.json
-├── client/                 # existing Vite app — reference only; delete after parity
 └── package.json            # dev scripts for API + Expo
 ```
 
@@ -223,6 +226,14 @@ not a dead end. Covered by `mobile/test/checkoutValidation.test.js`, `orderFlow.
 **Done when:** a fresh clone can go from zero to a running app on all targets using only the README,
 and a production web bundle builds cleanly.
 
+**Status:** done 2026-11-09. `README.md` now covers prerequisites, install, seed, env config,
+per-target run instructions, the API contract, web release (`npm run build:web` →
+`mobile/dist/`, `npm run serve:web`), EAS preview builds, and troubleshooting. The legacy Vite
+`client/` was removed (8 files), so `mobile/` is the only frontend. `mobile/eas.json` defines
+`preview` (internal Android APK / iOS ad-hoc), `preview-simulator`, and `production` profiles;
+bundle IDs are set in `app.json`. Verified with `npm test`, mobile lint, `expo-doctor` 20/20, and a
+clean web export (822 modules).
+
 ## 5. API contract (MVP)
 
 | Method | Path | Purpose |
@@ -263,22 +274,21 @@ Statuses for MVP: `pending_payment` → `preparing`. Later phases add `out_for_d
 | `node:sqlite` needs Node ≥ 22.5 | Deploy failure | Add `engines`; pin runtime in deploy config |
 | Float money math | Off-by-a-cent totals | Server rounds to 2 dp; consider integer cents post-MVP |
 | No idempotency key on `POST /api/orders` | A create that times out after the row is written can be retried into a duplicate order | Accepted for the MVP; the post-MVP fix is a client-supplied idempotency key stored with the order. Payment is protected: a second `/pay` returns 409 |
-| Two clients during migration | Wasted effort/confusion | Freeze `client/` at parity; delete it in Phase 7 |
 | `npx expo install` fails under npm 11.19 when a user-level `allow-scripts` is set (`EALLOWSCRIPTS`) | Dependency installs blocked | Add packages with `npm install` using the SDK-compatible versions Expo resolved (see `mobile/package.json`), or run with a clean `npm_config_userconfig` |
 | Android dev builds allow cleartext HTTP | A shipped build would permit unencrypted traffic | Scoped as a development convenience for LAN API access; remove `usesCleartextTraffic` (or move to a dev-only build profile) when the API is served over HTTPS |
 | Scope creep (accounts, tracking) | MVP slips | Out-of-scope list in §2 is binding until acceptance criteria pass |
 
 ## 9. Immediate next step
 
-Execute **Phase 7 — Tests, docs, release build**. Phase 6 landed the cross-platform polish (safe
-areas, responsive max widths, touch targets, accessibility, error boundary, offline banner, Android
-cleartext dev config); the remaining work there is the manual simulator/device/browser matrix, which
-needs hardware this environment does not have.
+**MVP is feature-complete.** Phases 0–7 are done; the only outstanding item is the manual Phase 6
+device/browser matrix (iOS simulator, Android emulator, physical iOS/Android devices, Chrome +
+Safari, screen readers, large text), which needs hardware this environment does not have. Run it
+before calling the MVP released.
 
-Phase 7 is now unblocked: delete the legacy `client/` app, finish the README/troubleshooting pass,
-and produce the static web export plus internal EAS preview builds. The functional flow — browse →
-menu → cart → checkout → payment → confirmation — is complete and was verified end-to-end against
-the API on a throwaway database.
+After that, the post-MVP queue from §2 is next: accounts, real payments, order history, courier
+tracking, Postgres persistence, integer-cent money, an idempotency key for `POST /api/orders`, and
+store submission via EAS. The functional flow — browse → menu → cart → checkout → payment →
+confirmation — is complete and was verified end-to-end against the API on a throwaway database.
 
 Phase 2 was a hard prerequisite for Phase 3 (API client, theme, components, `CartProvider`, route
 shell), so both phases landed together on 2026-11-03.

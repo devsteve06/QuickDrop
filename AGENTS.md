@@ -25,14 +25,14 @@ It is a different product on a different stack and now lives outside the repo, i
 | 4 — Cart & state | ✅ Done | Versioned AsyncStorage persistence, rehydration, `hydrated` gate, 32 mobile unit tests |
 | 5 — Checkout & order | ✅ Done | Validated guest form, server-priced order, simulated payment, confirmation + payment retry |
 | 6 — Cross-platform polish | ✅ Done (code) | Safe areas, web max widths, 44 px targets, a11y/focus, error boundary, offline banner, Android cleartext dev config |
-| 7 | ⬜ Not started | Device/browser matrix (manual), docs, release build, delete legacy `client/` |
+| 7 — Docs & release | ✅ Done | README, EAS preview profiles, web export + local serve, legacy `client/` removed |
 
 Verified at this checkpoint:
 - `npm test` → 15 server tests + 52 mobile tests, all passing.
 - Full order flow exercised against the real API on a throwaway DB: create → pay → fetch, totals
   matching the client to the cent, a tampered price ignored, a second `/pay` returning 409.
 - `npm run lint` (in `mobile/`) → exit 0.
-- `npx expo export --platform web` → success (822 modules).
+- `npx expo export --platform web` → success (822 modules) and `npx expo serve` serves it.
 - `npx expo-doctor` → 20/20 checks passed (2026-11-09).
 - Still manual: iOS simulator, Android emulator, iOS/Android device, Chrome + Safari (desktop and
   mobile widths), VoiceOver/TalkBack, and large-text settings.
@@ -52,10 +52,10 @@ quickdrop/
 │   ├── src/app/             Expo Router routes (_layout.jsx, index.jsx, …)
 │   ├── src/                 non-route code (api, state, components, theme)
 │   ├── test/                node --test suites for pure cart modules
-│   ├── app.json             Expo config (scheme, expo-router plugin)
+│   ├── app.json             Expo config (scheme, plugins, bundle IDs, web output)
+│   ├── eas.json             EAS build profiles (preview / simulator / production)
 │   ├── .env.example         EXPO_PUBLIC_API_URL for web/simulator/device
 │   └── AGENTS.md            Expo-specific agent rules
-├── client/                  LEGACY Vite web app — frozen, delete in Phase 7
 ├── PLAN.md                  MVP scope, phases, decisions, risks
 └── AGENTS.md                this file
 ```
@@ -74,6 +74,8 @@ Run from the repo root unless noted.
 | `npm test` | Both suites: API tests (`server/`) then cart tests (`mobile/test/`) |
 | `npm run lint --prefix mobile` | ESLint for the Expo app |
 | `npm run export:web --prefix mobile` | Static web build into `mobile/dist/` |
+| `npm run build:web` | Alias for the static web export |
+| `npm run serve:web` | Serve `mobile/dist/` at `http://localhost:8081` |
 
 Do **not** use `npx expo lint` here — the CLI version check fails under ESLint 9 even though the
 config is valid. Use `npm run lint --prefix mobile`.
@@ -119,8 +121,8 @@ Requirements: **Node >= 22.5** (`node:sqlite`). Node 24.22 is the verified runti
   `CART_SCHEMA_VERSION` (and the key suffix) so older payloads are discarded, not coerced.
 - **Native folders:** `ios/` and `android/` are generated (CNG). Configure native behavior in
   `app.json` / config plugins; never edit generated folders by hand.
-- **Legacy client:** `client/` is frozen. Do not add features there; delete it in Phase 7 after
-  the Expo app reaches parity.
+- **Release:** `mobile/eas.json` holds internal-preview profiles. Keep store submission out of the
+  MVP; bundle IDs live in `app.json`.
 - **Secrets/data:** never commit `.env`, `*.db`, `node_modules/`, or `dist/`.
 
 ## API contract
@@ -140,7 +142,7 @@ Order statuses today: `pending_payment` → `preparing`. Later phases add delive
 
 1. `npm test` passes.
 2. `npm run lint --prefix mobile` exits 0.
-3. `npm run export:web --prefix mobile` succeeds when routes/deps change.
+3. `npm run build:web` succeeds when routes/deps change (alias for the Expo web export).
 4. Manual flow still works: restaurants → menu → cart → checkout → confirmation.
 5. `PLAN.md` status table is updated if a phase completes.
 

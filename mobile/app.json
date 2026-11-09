@@ -19,9 +19,11 @@
       ]
     ],
     "ios": {
+      "bundleIdentifier": "com.devsteve06.quickdrop",
       "supportsTablet": true
     },
     "android": {
+      "package": "com.devsteve06.quickdrop",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -31,6 +33,7 @@
     },
     "web": {
       "bundler": "metro",
+      "output": "single",
       "favicon": "./assets/favicon.png",
       "themeColor": "#ea580c",
       "backgroundColor": "#f6f7f9"

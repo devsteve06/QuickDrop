@@ -8,6 +8,8 @@
     "dev:api": "npm run dev --prefix server",
     "dev:app": "npm run start --prefix mobile",
     "dev:web": "npm run web --prefix mobile",
+    "build:web": "npm run export:web --prefix mobile",
+    "serve:web": "npm run serve:web --prefix mobile",
     "seed": "npm run seed --prefix server",
     "test": "npm test --prefix server && npm test --prefix mobile",
     "install:all": "npm install && npm install --prefix server && npm install --prefix mobile"
